@@ -25,6 +25,18 @@ $_['text_add_link'] = 'Add';
 $_['text_add_color'] = 'Add';
 $_['text_add_color_text'] = 'Text color';
 
+$_['tab_product_designer'] = 'Product Designer';
+$_['text_enable'] = 'Enable';
+$_['text_frame_image'] = 'Frame image';
+$_['allow_adding_text'] = 'Allow adding text';
+$_['allow_text_effects'] = 'Allow text effect';
+$_['text_effects_border'] = 'Border';
+$_['text_effects_shadow'] = 'Shadow';
+$_['text_effects_curve'] = 'Curve';
+$_['text_color'] = 'Text colors';
+$_['text_any_color'] = 'Any color';
+$_['text_only_added_colors'] = 'Only added colors';
+
 $_['error_permission'] = 'Warning: You do not have permission to modify module Produst Design!';
 
 $_['error_option_save_design'] = "Option to save customer's design is Required";
