@@ -1,21 +1,21 @@
 ﻿<?php echo $header; ?>
 <style>
-  #sortable-google-fonts, #sortable-text-color { list-style-type: none;padding: 0;display:table;}
-  #sortable-google-fonts{ width: 230px}
-  #sortable-text-color{ width:150px;}
-  #sortable-google-fonts li, #sortable-text-color li { padding: 10px;height:15px;border-bottom:1px dashed #ddd;}
-  #sortable-google-fonts li:last-child, #sortable-text-color li:last-child { border-bottom:none;}
-  #sortable-google-fonts li:hover, #sortable-text-color li:hover{ background: #f0f0f0;}
-  #sortable-text-color li span.colorcode { width:50px; float:left; }
-  #sortable-text-color li span.color{ width:15px; height:15px; margin: 0 20px; float:left;}
-  #sortable-google-fonts li span.close, #sortable-text-color li span.close{ float:right;cursor:pointer;}
+  #sortable_google_fonts, #sortable_text_color { list-style-type: none;padding: 0;display:table;}
+  #sortable_google_fonts{ width: 230px}
+  #sortable_text_color{ width:150px;}
+  #sortable_google_fonts li, #sortable_text_color li { padding: 10px;height:15px;border-bottom:1px dashed #ddd;}
+  #sortable_google_fonts li:last-child, #sortable_text_color li:last-child { border-bottom:none;}
+  #sortable_google_fonts li:hover, #sortable_text_color li:hover{ background: #f0f0f0;}
+  #sortable_text_color li span.colorcode { width:50px; float:left; }
+  #sortable_text_color li span.color{ width:15px; height:15px; margin: 0 20px; float:left;}
+  #sortable_google_fonts li span.close, #sortable_text_color li span.close{ float:right;cursor:pointer;}
 </style>
 <script>
   $(function() {
-    $( "#sortable-google-fonts" ).sortable();
-    $( "#sortable-google-fonts" ).disableSelection();
-	$( "#sortable-text-color" ).sortable();
-    $( "#sortable-text-color" ).disableSelection();
+    $( "#sortable_google_fonts" ).sortable();
+    $( "#sortable_google_fonts" ).disableSelection();
+	$( "#sortable_text_color" ).sortable();
+    $( "#sortable_text_color" ).disableSelection();
   });
   </script>
 <div id="content">
@@ -128,9 +128,12 @@
           <tr>
             <td><?php echo $text_add_link_google_fonts;?></td>
             <td>
-	            <input type="text" id="pd_google_font" value=""  style="display:inline-block;"/>
+	            <input type="text" id="google_fonts" value=""  style="display:inline-block;"/>
                 <a onclick="addGoogleFonts();" class="button" style="margin-left: 10px"><?php echo $text_add_link;?></a>
-				<ul id="sortable-google-fonts">
+                <div style="display:none;" id="msg_color_text_error" class="warning">
+	               <span>color not exist</span>
+                </div>
+				<ul id="sortable_google_fonts">
 					<li>
 						<span style="font-family: Time new roman">Time New Roman</span>
 						<span class="close fa fa-times"></span>
@@ -140,12 +143,13 @@
 						<span class="close fa fa-times"></span>
 					</li>
 				</ul>
+                <input id="pd_google_font" type="hidden" value="" name="pd_google_font"/>
             </td>            
           </tr>
           <tr>
             <td><?php echo $text_add_color_text;?></td>
             <td>
-				<select id="pd_text_color" name="colorpicker-picker">
+				<select name="colorpicker-picker">
 				  <option value="#ac725e">#ac725e</option>
 				  <option value="#d06b64">#d06b64</option>
 				  <option value="#f83a22">#f83a22</option>
@@ -163,7 +167,7 @@
 				</select>
                 <a id="addTextColor" class="button" style="margin-left: 10px"><?php echo $text_add_color;?></a>
 				<div style="margin-top:15px;">
-					<ul id="sortable-text-color">
+					<ul id="sortable_text_color">
 						<li>
 							<span class="colorcode" style="color:#ff7537;">#ff7537</span>
 							<span class="color" style="background: #ff7537;"></span>
@@ -175,6 +179,7 @@
 							<span class="close fa fa-times"></span>
 						</li>
 					</ul>
+                    <input id="pd_text_color" type="hidden" value="" name="pd_text_color"/>
 				</div>
             </td> 
           </tr>
@@ -190,31 +195,72 @@
 	
 	$('.close').click(function(){
 		$(this).parent().remove();
+        setValueColors();
+        setValueFonts();
 	});
-	
+    
+    $(document).ready(function() {
+        setValueColors();
+        setValueFonts();
+    });
+    
+    function setValueColors(){
+    	var listColors = document.getElementById('sortable_text_color');
+        var list_items = listColors.getElementsByTagName("li");
+        var colors = "";
+        for (var i=0; i < list_items.length; i++)
+        {
+            if(colors == "")
+            {
+                colors = list_items[i].textContent;
+            }
+            else
+            {
+                colors = colors + "," + list_items[i].textContent;    
+            }                   
+        }
+        $('#pd_text_color').val(colors);
+    }
+    
+    function setValueFonts(){
+    	var listFonts = document.getElementById('sortable_google_fonts');
+        var list_items = listFonts.getElementsByTagName("li");
+        var fonts = "";
+        for (var i=0; i < list_items.length; i++)
+        {
+            if(fonts == "")
+            {
+                fonts = list_items[i].textContent;
+            }
+            else
+            {
+                fonts = fonts + "," + list_items[i].textContent;    
+            }                   
+        }
+        $('#pd_google_font').val(fonts);
+    }
+    
 	$('#addTextColor').click(function(){
-		$('ul#sortable-text-color').append('<li><span class="colorcode" style="color:'+ $('span.simplecolorpicker').attr('title') +'">'+ $('span.simplecolorpicker').attr('title') +'</span><span class="color" style="background: '+ $('span.simplecolorpicker').attr('title') +'"></span><span class="close fa fa-times"></span></li>');
+		$('ul#sortable_text_color').append('<li><span class="colorcode" style="color:'+ $('span.simplecolorpicker').attr('title') +'">'+ $('span.simplecolorpicker').attr('title') +'</span><span class="color" style="background: '+ $('span.simplecolorpicker').attr('title') +'"></span><span class="close fa fa-times"></span></li>');
+        setValueColors();
 	});
-	
 </script>
 <script type="text/javascript"><!--
 
 function addGoogleFonts(){
-    $('#msg_fonts_google_remove').attr("style","display:none");
-    $('#msg_fonts_google').attr("style","display:none");
     $('#msg_fonts_google_error').attr("style","display:none");
-    var fonts = $('#fonts_google').val();    
+    var fonts = $('#google_fonts').val();    
 	$.ajax({
-		url: 'index.php?route=module/pcpb/addGoogleFonts&token=<?php echo $token; ?>',
+		url: 'index.php?route=module/product_designer/addGoogleFonts&token=<?php echo $token; ?>',
         type: 'post',
 		dataType: 'json',
         data: 'fonts=' + fonts,
 		success: function(json){
 		  if(json != null && json != "")
           {
-            var nameFonts =  json.replace(/ /g, "");
-			$('#msg_fonts_google').attr("style","display:inline-block");
-            $('#pcpb_text_font').append("<option value="+ json +" id="+ nameFonts +">"+ json +"</option>");            
+            $('ul#sortable_google_fonts').append('<li><span style="font-family: '+ json +'">'+ json +'</span><span class="close fa fa-times"></span></li>');
+            setValueFonts();    
+            $('#msg_fonts_google_error').attr("style","display:none");       
           }
           else
           {
@@ -226,74 +272,6 @@ function addGoogleFonts(){
         }
 	});
 }
-function removeGoogleFonts(){
-    $('#msg_fonts_google_remove').attr("style","display:none");
-    $('#msg_fonts_google').attr("style","display:none");
-    $('#msg_fonts_google_error').attr("style","display:none");
-    var fonts = $('#pcpb_text_font').val(); 
-    var re = /((\s*\S+)*)\s*/;
-    fonts = fonts.replace(re, "$1");   
-	$.ajax({
-		url: 'index.php?route=module/pcpb/removeGoogleFonts&token=<?php echo $token; ?>',
-        type: 'post',
-		dataType: 'json',
-        data: 'fonts=' + fonts,
-		success: function(json){
-            var nameFonts =  fonts.replace(/ /g, "");
-		    $('#'+nameFonts).remove();
-			$('#msg_fonts_google_remove').attr("style","display:inline-block");        
-		}
-	});
-}
 
-function addColorText(){
-    $('#msg_color_text_remove').attr("style","display:none");
-    $('#msg_color_text').attr("style","display:none");
-    $('#msg_color_text_error').attr("style","display:none");
-    var color = $('#text_color').val();    
-	$.ajax({
-		url: 'index.php?route=module/pcpb/addColorText&token=<?php echo $token; ?>',
-        type: 'post',
-		dataType: 'json',
-        data: 'color=' + color,
-		success: function(json){
-		  if(json != null && json != "")
-          {
-            var nameColor =  json.replace(/ /g, "");
-            var nameN =  json.replace("#", "");
-			$('#msg_color_text').attr("style","display:inline-block");
-            $('#pcpb_text_color').append("<option value="+ json +" style='background:"+ nameColor +"' id="+ nameN +">"+ json +"</option>");                     $('#text_color').val("");    
-          }
-          else
-          {
-            $('#msg_color_text_error').attr("style","display:inline-block");
-          }
-		},
-        error: function(){
-            $('#msg_color_text_error').attr("style","display:inline-block");
-        }
-	});
-}
-
-function removeColorText(){
-    $('#msg_color_text_remove').attr("style","display:none");
-    $('#msg_color_text').attr("style","display:none");
-    $('#msg_color_text_error').attr("style","display:none");
-    var color = $('#pcpb_text_color').val(); 
-    var re = /((\s*\S+)*)\s*/;
-    color = color.replace(re, "$1");   
-	$.ajax({
-		url: 'index.php?route=module/pcpb/removeColorText&token=<?php echo $token; ?>',
-        type: 'post',
-		dataType: 'json',
-        data: 'color=' + color,
-		success: function(json){
-            var nameColor =  color.replace("#", "");
-		    $('#'+nameColor).remove();
-			$('#msg_color_text_remove').attr("style","display:inline-block");     
-            $('.color-list').css('background', $('.color-list').val());   
-		}
-	});
-}
 //--></script>
 <?php echo $footer; ?>

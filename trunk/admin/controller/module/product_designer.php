@@ -11,6 +11,9 @@ class ControllerModuleProductDesigner extends Controller {
 		$this->load->model('setting/setting');
 				
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+            echo $this->request->post['pd_text_color'];
+            print($this->request->post['pd_text_color']);
+            break;
 			$this->model_setting_setting->editSetting('pd', $this->request->post);		
 					
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -271,8 +274,6 @@ class ControllerModuleProductDesigner extends Controller {
             if($pos > 0 && $fontsPlus != null && $fontsPlus != "")
             {
                 $fonts = str_replace("+", " ", $fontsPlus);
-        		$this->load->model('module/product_designer');
-        		$this->model_module_product_designer->addGoogleFonts('fonts_google', $fonts);
                 
                 $this->response->setOutput(json_encode($fonts));
             } 
