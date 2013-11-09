@@ -23,6 +23,16 @@
 <script type="text/javascript" src="view/javascript/jquery/tabs.js"></script>
 <script type="text/javascript" src="view/javascript/jquery/superfish/js/superfish.js"></script>
 <script type="text/javascript" src="view/javascript/common.js"></script>
+
+<!----BEGIN VQMOD---->
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css">
+<link type="text/css" href="view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker.css" rel="stylesheet" />
+<link type="text/css" href="view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker-regularfont.css" rel="stylesheet" />
+<link type="text/css" href="view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker-glyphicons.css" rel="stylesheet" />
+<link type="text/css" href="view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker-fontawesome.css" rel="stylesheet" />
+<script type="text/javascript" src="view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker.js"></script>
+<!----END VQMOD---->
+
 <?php foreach ($scripts as $script) { ?>
 <script type="text/javascript" src="<?php echo $script; ?>"></script>
 <?php } ?>
