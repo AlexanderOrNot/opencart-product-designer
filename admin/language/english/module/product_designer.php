@@ -4,15 +4,32 @@
 $_['heading_title'] = 'Product Designer';
 
 $_['text_module'] = 'Modules';
-$_['text_success'] = 'Success: You have modified module PP Layout!';
-$_['text_content_top'] = 'Content Top';
-$_['text_content_bottom'] = 'Content Bottom';
-$_['text_column_left'] = 'Column Left';
-$_['text_column_right'] = 'Column Right';
+$_['text_product_options'] = 'product options';
+$_['text_option_save_design'] = "Option to save customer's design";
+$_['text_option_save_image'] = "Option to save customer's image";
+$_['text_option_save_text'] = "Option to save customer's text";
+$_['text_option_save_font'] = "Option to save customer's selected font";
+$_['text_option_save_text_color'] = "Option to save customer's selected text color";
 
-$_['entry_layout'] = 'Layout:';
-$_['entry_position'] = 'Position:';
-$_['entry_status'] = 'Status:';
-$_['entry_sort_order'] = 'Sort Order:';
+$_['text_size'] = 'size';
+$_['text_max_size_upload'] = "Max size of image uploaded by customer (in KB)";
 
-$_['error_permission'] = 'Warning: You do not have permission to modify module PP Layout!';
+$_['text_text'] = 'text';
+$_['text_enable_system_fonts'] = 'Enable system fonts';
+$_['text_yes'] = 'Yes';
+$_['text_no'] = 'No';
+
+$_['text_add_link_google_fonts'] = 'Google fonts';
+$_['text_add_link'] = 'Add';
+
+$_['text_add_color'] = 'Add';
+$_['text_add_color_text'] = 'Text color';
+
+$_['error_permission'] = 'Warning: You do not have permission to modify module Produst Design!';
+
+$_['error_option_save_design'] = "Option to save customer's design is Required";
+$_['error_option_save_image'] = "Option to save customer's image is Required";
+$_['error_option_save_text'] = "Option to save customer's text is Required";
+$_['error_option_save_font'] = "Option to save customer's selected font is Required";
+$_['error_option_save_text_color'] = "Option to save customer's selected text color is Required";
+$_['error_max_size_upload'] = 'Max size of image upload is Required';
