@@ -1,0 +1,136 @@
+<modification>
+	<id>Product Designer</id>
+	<version>1.1</version>
+	<vqmver>2.4.1</vqmver>
+	<author>WeDoWeb.com.au | contact@wedoweb.com.au</author>
+	
+	<file name="admin/view/template/catalog/product_form.tpl">
+		<operation>
+			<search position="replace">
+				<![CDATA[
+					<a href="#tab-design"><?php echo $tab_design; ?></a>
+				]]>
+			</search>
+			<add>
+				<![CDATA[
+					<a href="#tab-design"><?php echo $tab_design; ?></a><a href="#tab-product-designer"><?php echo $tab_product_designer; ?></a>
+				]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="after" index="2" offset="8">
+				<![CDATA[
+					<option value="<?php echo $layout['layout_id']; ?>"><?php echo $layout['name']; ?></option>
+				]]>
+			</search>
+			<add>
+				<![CDATA[
+					<div id="tab-product-designer">
+						<table class="form">
+				            <tr>
+				              <td><?php echo $text_enable; ?></td>
+				              <td>
+				              		<input type="radio" name="enable" value="1" />
+				                	<?php echo $text_yes; ?>
+				                	<input type="radio" name="enable" value="0" checked="checked" />
+				                	<?php echo $text_no; ?>
+				              </td>
+				            </tr>
+							<tr>
+				              <td><?php echo $text_frame_image; ?></td>
+				              <td>
+				              		<div class="image"><img src="<?php echo $no_image; ?>" alt="" id="thumb-frame-image" />
+									  <input type="hidden" name="frame-image" value="" id="frame-image" />
+									  <br />
+									  <a onclick="image_upload('frame-image', 'thumb-frame-image');"><?php echo $text_browse; ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a onclick="$('#thumb-frame-image').attr('src', '<?php echo $no_image; ?>'); $('#frame-image').attr('value', '');"><?php echo $text_clear; ?></a>
+									</div>
+				              </td>
+				            </tr>
+				            <tr>
+				              <td><?php echo $allow_adding_text ?></td>
+				              <td>
+				              		<input type="radio" name="add_text" value="1" checked="checked" />
+				                	<?php echo $text_yes; ?>
+				                	<input type="radio" name="add_text" value="0" />
+				                	<?php echo $text_no; ?>
+				              </td>
+				            </tr>
+				            <tr>
+				              <td><?php echo $allow_text_effects ?></td>
+				              <td>
+				              		<input type="checkbox" name="text_effect" value="0" checked='checked'/>
+				                	<?php echo $text_effects_border ?>
+									<br>
+				                	<input type="checkbox" name="text_effect" value="1" checked='checked'/>
+				                	<?php echo $text_effects_shadow ?>
+									<br>
+									<input type="checkbox" name="text_effect" value="2" checked='checked'/>
+				                	<?php echo $text_effects_curve ?>
+				              </td>
+				            </tr>
+				            <tr>
+				              <td><?php echo $text_color ?></td>
+				              <td>
+				              		<input type="radio" name="text_color" value="0" />
+				                	<?php echo $text_any_color ?>
+									<br>
+				                	<input type="radio" name="text_color" value="1" checked='checked'/>
+				                	<?php echo $text_only_added_colors ?>
+				              </td>
+				            </tr>
+				        </table>
+					</div>
+				]]>
+			</add>
+		</operation>
+	</file>
+	<file name="admin/controller/catalog/product.php">
+		<operation>
+			<search position="after" >
+				<![CDATA[
+					$this->data['tab_design'] = $this->language->get('tab_design');
+				]]>
+			</search>
+			<add>
+				<![CDATA[
+					$this->language->load('module/product_designer');
+					$this->data['tab_product_designer'] = $this->language->get('tab_product_designer');
+					$this->data['text_enable'] = $this->language->get('text_enable');
+					$this->data['text_frame_image'] = $this->language->get('text_frame_image');
+					$this->data['allow_adding_text'] = $this->language->get('allow_adding_text');
+					$this->data['allow_text_effects'] = $this->language->get('allow_text_effects');
+					$this->data['text_effects_border'] = $this->language->get('text_effects_border');
+					$this->data['text_effects_shadow'] = $this->language->get('text_effects_shadow');
+					$this->data['text_effects_curve'] = $this->language->get('text_effects_curve');
+					$this->data['text_color'] = $this->language->get('text_color');
+					$this->data['text_any_color'] = $this->language->get('text_any_color');
+					$this->data['text_only_added_colors'] = $this->language->get('text_only_added_colors');
+				]]>
+			</add>
+		</operation>
+		
+		
+		
+	</file>
+	
+    <file name="admin/view/template/common/header.tpl">
+        <operation>
+			<search position="after" index="1">
+				<![CDATA[
+					<script type="text/javascript" src="view/javascript/common.js"></script>
+				]]>
+			</search>
+			<add>
+				<![CDATA[
+					<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css">
+					<link type="text/css" href="view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker.css" rel="stylesheet" />
+					<link type="text/css" href="view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker-regularfont.css" rel="stylesheet" />
+					<link type="text/css" href="view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker-glyphicons.css" rel="stylesheet" />
+					<link type="text/css" href="view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker-fontawesome.css" rel="stylesheet" />
+					<script type="text/javascript" src="view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker.js"></script>
+				]]>
+			</add>
+		</operation>
+	</file>
+	
+</modification>
