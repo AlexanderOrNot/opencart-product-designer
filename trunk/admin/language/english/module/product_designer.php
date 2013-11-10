@@ -37,7 +37,8 @@ $_['text_color'] = 'Text colors';
 $_['text_any_color'] = 'Any color';
 $_['text_only_added_colors'] = 'Only added colors';
 
-$_['error_permission'] = 'Warning: You do not have permission to modify module Produst Design!';
+$_['text_success']= 'Success: You have modified module Produst Designer!';
+$_['error_permission'] = 'Warning: You do not have permission to modify module Produst Designer!';
 
 $_['error_option_save_design'] = "Option to save customer's design is Required";
 $_['error_option_save_image'] = "Option to save customer's image is Required";

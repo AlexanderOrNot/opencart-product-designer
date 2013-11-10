@@ -11,10 +11,8 @@ class ControllerModuleProductDesigner extends Controller {
 		$this->load->model('setting/setting');
 				
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-            echo $this->request->post['pd_text_color'];
-            print($this->request->post['pd_text_color']);
-            break;
-			$this->model_setting_setting->editSetting('pd', $this->request->post);		
+            
+            $this->model_setting_setting->editSetting('product_designer', $this->request->post);		
 					
 			$this->session->data['success'] = $this->language->get('text_success');
 						
@@ -174,24 +172,18 @@ class ControllerModuleProductDesigner extends Controller {
 			$this->data['pd_system_font_enable'] = ($this->config->get('pd_system_font_enable') == 1) ? true : false;
 		}
         
-        $list_fonts_google = $this->model_setting_setting->getSetting('fonts_google');
-        
-        foreach ($list_fonts_google as $key=>$name){
-            $this->data['list_link_google_fonts_options'][] = array(
-                'key'     =>      $key,
-                'product_designer_fonts_google'     =>      $name
-            );    
-        }
-        
-        $list_color_text = $this->model_setting_setting->getSetting('color_text');
-        
-        foreach ($list_color_text as $key=>$name){
-            $this->data['list_link_color_text_options'][] = array(
-                'key'     =>      $key,
-                'product_designer_color_text'     =>      $name
-            );    
-        }
+        if (isset($this->request->post['pd_google_font'])) {
+			$this->data['list_link_google_fonts_options'] = explode(',',$this->request->post['pd_google_font']);
+		} else {
+			$this->data['list_link_google_fonts_options'] = explode(',',$this->config->get('pd_google_font'));
+		}
         		
+        if (isset($this->request->post['pd_text_color'])) {
+			$this->data['list_link_color_text_options'] = explode(',',$this->request->post['pd_text_color']);
+		} else {
+			$this->data['list_link_color_text_options'] = explode(',',$this->config->get('pd_text_color'));
+		}
+        
         $this->data['token'] = $this->session->data['token'];
 		
 		$this->data['action'] = $this->url->link('module/product_designer', 'token=' . $this->session->data['token'], 'SSL');
@@ -206,7 +198,7 @@ class ControllerModuleProductDesigner extends Controller {
 				
 		$this->response->setOutput($this->render());
 	}
-	
+	    
 	public function install()
 	{
 		$this->load->model('module/product_designer');
