@@ -274,59 +274,7 @@ class ControllerModuleProductDesigner extends Controller {
                 $this->response->setOutput(json_encode(""));
             }           
         }        
-	}
-    
-    public function reLoadFonts()
-	{
-	   $json = array();
-	    $list_fonts_google = $this->model_setting_setting->getSetting('fonts_google');
-        
-        foreach ($list_fonts_google as $key=>$name){
-            $json = array(
-                'key'     =>      $key,
-                'product_designer_fonts_google'     =>      $name
-            );    
-        }
-        
-        $this->response->setOutput(json_encode($json));
-	}
-    
-    public function removeGoogleFonts()
-	{
-	    $fonts = $this->request->post['fonts'];
-        
-		$this->load->model('module/product_designer');
-		$this->model_module_product_designer->removeGoogleFonts($fonts);
-        
-        $this->response->setOutput(json_encode($fonts));
-	}
-    
-    public function addColorText()
-	{
-	    $colorText = $this->request->post['color'];
-        if($colorText != null && $colorText != "")
-        {
-            $color = str_replace(" ", "", $colorText);
-    		$this->load->model('module/product_designer');
-    		$this->model_module_product_designer->addColorText('color_text', $color);
-            
-            $this->response->setOutput(json_encode($color));
-        } 
-        else
-        {
-            $this->response->setOutput(json_encode(""));
-        }    
-	}
-    
-    public function removeColorText()
-	{
-	    $color = $this->request->post['color'];
-        
-		$this->load->model('module/product_designer');
-		$this->model_module_product_designer->removeColorText($color);
-        
-        $this->response->setOutput(json_encode($color));
-	}
+	}    
 }
 
 ?>

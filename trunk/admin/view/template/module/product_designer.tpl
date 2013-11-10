@@ -34,7 +34,7 @@
   <div class="box">
     <div class="heading">
       <h1><img src="view/image/module.png" alt="" /> <?php echo $heading_title; ?></h1>
-      <div class="buttons"><a onclick="$('#form').submit();" class="button"><?php echo $button_save; ?></a><a href="<?php echo $cancel; ?>" class="button"><?php echo $button_cancel; ?></a></div>
+      <div class="buttons"><a onclick="save();" class="button"><?php echo $button_save; ?></a><a href="<?php echo $cancel; ?>" class="button"><?php echo $button_cancel; ?></a></div>
     </div>
     <div class="content">
       <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -197,14 +197,13 @@
 	
 	$('.close').click(function(){
 		$(this).parent().remove();
-        setValueColors();
-        setValueFonts();
 	});
-        
-    $(document).ready(function() {
+    
+    function save(){
         setValueColors();
         setValueFonts();
-    });
+        $('#form').submit();
+    }
     
     function setValueColors(){
     	var listColors = document.getElementById('sortable_text_color');
@@ -244,7 +243,6 @@
     
 	$('#addTextColor').click(function(){
 		$('ul#sortable_text_color').append('<li><span class="colorcode" style="color:'+ $('span.simplecolorpicker').attr('title') +'">'+ $('span.simplecolorpicker').attr('title') +'</span><span class="color" style="background: '+ $('span.simplecolorpicker').attr('title') +'"></span><span class="close fa fa-times"></span></li>');
-        setValueColors();
 	});
 </script>
 <script type="text/javascript"><!--
@@ -260,8 +258,7 @@ function addGoogleFonts(){
 		success: function(json){
 		  if(json != null && json != "")
           {
-            $('ul#sortable_google_fonts').append('<li><span style="font-family: '+ json +'">'+ json +'</span><span class="close fa fa-times"></span></li>');
-            setValueFonts();    
+            $('ul#sortable_google_fonts').append('<li><span style="font-family: '+ json +'">'+ json +'</span><span class="close fa fa-times"></span></li>');    
             $('#msg_fonts_google_error').attr("style","display:none"); 
             var nameFonts =  json.replace(/ /g, "+");   
             $('#header').after('<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family='+ nameFonts +'">');   
