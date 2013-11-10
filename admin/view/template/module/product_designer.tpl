@@ -1,4 +1,8 @@
 ﻿<?php echo $header; ?>
+<link id="" href='http://fonts.googleapis.com/css?family=<?php for ($i = 0; $i < count($list_link_google_fonts_options); $i++) {
+    $fontName = trim($list_link_google_fonts_options[$i]);
+    echo str_replace(" ", "+", $fontName)."|";
+} ?>' rel='stylesheet' type='text/css'/>
 <style>
   #sortable_google_fonts, #sortable_text_color { list-style-type: none;padding: 0;display:table;}
   #sortable_google_fonts{ width: 230px}
@@ -121,7 +125,7 @@
               <td>
               		<input type="radio" name="pd_system_font_enable" value="1" <?php if ($pd_system_font_enable) echo "checked='checked'";?> />
                 	<?php echo $text_yes; ?>
-                	<input type="radio" name="pd_system_font_enable" value="0" <?php if ($pd_system_font_enable) echo "checked='checked'";?>/>
+                	<input type="radio" name="pd_system_font_enable" value="0" <?php if (!$pd_system_font_enable) echo "checked='checked'";?>/>
                 	<?php echo $text_no; ?>
               </td>
           </tr>
@@ -130,18 +134,17 @@
             <td>
 	            <input type="text" id="google_fonts" value=""  style="display:inline-block;"/>
                 <a onclick="addGoogleFonts();" class="button" style="margin-left: 10px"><?php echo $text_add_link;?></a>
-                <div style="display:none;" id="msg_color_text_error" class="warning">
-	               <span>color not exist</span>
+                <div style="display:none;" id="msg_fonts_google_error" class="warning">
+	               <span>Link not exist</span>
                 </div>
 				<ul id="sortable_google_fonts">
-					<li>
-						<span style="font-family: Time new roman">Time New Roman</span>
-						<span class="close fa fa-times"></span>
-					</li>
-					<li>
-						<span style="font-family: Arial">Arial</span>
-						<span class="close fa fa-times"></span>
-					</li>
+                    <?php for ($i = 0; $i < count($list_link_google_fonts_options); $i++) {
+                        $fontName = trim($list_link_google_fonts_options[$i]);?>
+                        <li>
+    						<span style="font-family:<?php echo $fontName;?>"><?php echo $fontName;?></span>
+    						<span class="close fa fa-times"></span>
+    					</li>       
+                    <?php } ?>					
 				</ul>
                 <input id="pd_google_font" type="hidden" value="" name="pd_google_font"/>
             </td>            
@@ -149,7 +152,7 @@
           <tr>
             <td><?php echo $text_add_color_text;?></td>
             <td>
-				<select name="colorpicker-picker">
+				<select id="colorpicker_picker">
 				  <option value="#ac725e">#ac725e</option>
 				  <option value="#d06b64">#d06b64</option>
 				  <option value="#f83a22">#f83a22</option>
@@ -168,16 +171,15 @@
                 <a id="addTextColor" class="button" style="margin-left: 10px"><?php echo $text_add_color;?></a>
 				<div style="margin-top:15px;">
 					<ul id="sortable_text_color">
-						<li>
-							<span class="colorcode" style="color:#ff7537;">#ff7537</span>
-							<span class="color" style="background: #ff7537;"></span>
-							<span class="close fa fa-times"></span>
-						</li>
-						<li>
-							<span class="colorcode" style="color:#92e1c0;">#92e1c0</span>
-							<span class="color" style="background: #92e1c0;"></span>
-							<span class="close fa fa-times"></span>
-						</li>
+                        <?php for ($i = 0; $i < count($list_link_color_text_options); $i++) {
+                            $colorName = str_replace(" ", "", $list_link_color_text_options[$i]);
+                            ?>
+                            <li>
+                                <span class="colorcode" style="color: <?php echo $colorName;?>"><?php echo $colorName;?></span>
+    							<span class="color" style="background: <?php echo $colorName;?>;"></span>
+    							<span class="close fa fa-times"></span>
+                            </li>       
+                        <?php } ?>						
 					</ul>
                     <input id="pd_text_color" type="hidden" value="" name="pd_text_color"/>
 				</div>
@@ -190,7 +192,7 @@
 </div>
 <script type="text/javascript">
 	//BEGIN ADD COLOR PICKER
-	$('select[name="colorpicker-picker"]').simplecolorpicker({picker: true, theme: 'fontawesome'});
+	$('#colorpicker_picker').simplecolorpicker({picker: true, theme: 'fontawesome'});
 	//END ADD COLOR PICKER
 	
 	$('.close').click(function(){
@@ -198,7 +200,7 @@
         setValueColors();
         setValueFonts();
 	});
-    
+        
     $(document).ready(function() {
         setValueColors();
         setValueFonts();
@@ -260,7 +262,9 @@ function addGoogleFonts(){
           {
             $('ul#sortable_google_fonts').append('<li><span style="font-family: '+ json +'">'+ json +'</span><span class="close fa fa-times"></span></li>');
             setValueFonts();    
-            $('#msg_fonts_google_error').attr("style","display:none");       
+            $('#msg_fonts_google_error').attr("style","display:none"); 
+            var nameFonts =  json.replace(/ /g, "+");   
+            $('#header').after('<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family='+ nameFonts +'">');   
           }
           else
           {

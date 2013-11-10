@@ -28,26 +28,10 @@ EOF;
 EOF;
 		$this->db->query($sql);
         
-		$sql = "INSERT INTO `{$prefix}setting`(`group`, `key`, `value`) VALUES ('fonts_google','Quattrocento','Quattrocento')";
+		$sql = "INSERT INTO `{$prefix}setting`(`group`, `key`, `value`) VALUES ('product_designer','pd_google_font','Engagement,Damion,Oswald,Hanalei Fill,Flavors')";
         $this->db->query($sql);
-        $sql = "INSERT INTO `{$prefix}setting`(`group`, `key`, `value`) VALUES ('fonts_google','Trykker','Trykker')";
-        $this->db->query($sql);
-        $sql = "INSERT INTO `{$prefix}setting`(`group`, `key`, `value`) VALUES ('fonts_google','Roboto','Roboto')";
-        $this->db->query($sql);
-        $sql = "INSERT INTO `{$prefix}setting`(`group`, `key`, `value`) VALUES ('fonts_google','Hanalei Fill','Hanalei Fill')";
-        $this->db->query($sql);
-        $sql = "INSERT INTO `{$prefix}setting`(`group`, `key`, `value`) VALUES ('fonts_google','Flavors','Flavors')";
-        $this->db->query($sql);
-        
-        $sql = "INSERT INTO `{$prefix}setting`(`group`, `key`, `value`) VALUES ('color_text','#fd0000','#fd0000')";
-        $this->db->query($sql);
-        $sql = "INSERT INTO `{$prefix}setting`(`group`, `key`, `value`) VALUES ('color_text','#0704ee','#0704ee')";
-        $this->db->query($sql);
-        $sql = "INSERT INTO `{$prefix}setting`(`group`, `key`, `value`) VALUES ('color_text','#e8f607','#e8f607')";
-        $this->db->query($sql);
-        $sql = "INSERT INTO `{$prefix}setting`(`group`, `key`, `value`) VALUES ('color_text','#28781f','#28781f')";
-        $this->db->query($sql);
-        $sql = "INSERT INTO `{$prefix}setting`(`group`, `key`, `value`) VALUES ('color_text','#f4ae07','#f4ae07')";
+                
+        $sql = "INSERT INTO `{$prefix}setting`(`group`, `key`, `value`) VALUES ('product_designer','pd_text_color','#ac725e,#d06b64,#f83a22,#fa573c,#ff7537')";
         $this->db->query($sql);
 	}
 	
@@ -58,11 +42,8 @@ EOF;
 		$sql = "DROP TABLE IF EXISTS `".DB_PREFIX."product_designer`;";
 		$this->db->query($sql);
         
-        $sql = "DELETE FROM `oc_setting` WHERE `group` = 'fonts_google'";
-		$this->db->query($sql);
-        
-        $sql = "DELETE FROM `oc_setting` WHERE `group` = 'color_text'";
-		$this->db->query($sql);
+        $sql = "DELETE FROM `".DB_PREFIX."setting` WHERE `group` = 'product_designer'";
+		$this->db->query($sql);        
 	}
 	public function getProductOptionDesigner($product_id)
 	{
