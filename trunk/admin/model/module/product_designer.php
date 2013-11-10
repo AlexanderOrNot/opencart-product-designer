@@ -6,13 +6,14 @@ class ModelModuleProductDesigner extends Model {
 		CREATE TABLE IF NOT EXISTS `{$prefix}product_option_designer` (
 		  `product_id` int(11) NOT NULL,
 		  `enable` tinyint(1) NOT NULL DEFAULT '0',
-		  `add_text` tinyint(1) NOT NULL DEFAULT '0',
-		  `add_images` tinyint(1) NOT NULL DEFAULT '0',
-		  `add_custom_images` tinyint(1) NOT NULL DEFAULT '0',
-		  `select_image_preset` tinyint(1) NOT NULL DEFAULT '0',
-		  `upload_background` tinyint(1) NOT NULL DEFAULT '0',
+		  `frame_image` nvarchar(225),
+		  `allow_adding_text` tinyint(1) DEFAULT '0',
+		  `allow_text_effect_border` tinyint(1) DEFAULT '0',
+		  `allow_text_effect_shadow` tinyint(1) DEFAULT '0',
+		  `allow_text_effect_curve` tinyint(1) DEFAULT '0',
+          `text_color` tinyint(1) DEFAULT '0',
 		  KEY `product_id` (`product_id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 EOF;
 		$this->db->query($sql);
 		
