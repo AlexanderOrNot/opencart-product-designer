@@ -149,7 +149,7 @@ class ControllerProductDesignerCreate extends Controller {
         
 		$this->load->model('setting/setting');
         $list_fonts_google = $this->model_setting_setting->getSetting('fonts_google');
-        
+        $this->data['list_link_google_fonts_options'] = array();
         foreach ($list_fonts_google as $key=>$name){
             $this->data['list_link_google_fonts_options'][] = array(
                 'key'     =>      $key,
@@ -158,7 +158,7 @@ class ControllerProductDesignerCreate extends Controller {
         }
         
         $list_color_text = $this->model_setting_setting->getSetting('color_text');
-        
+        $this->data['list_link_color_text_options'] = array();
         foreach ($list_color_text as $key=>$name){
             $this->data['list_link_color_text_options'][] = array(
                 'key'     =>      $key,
