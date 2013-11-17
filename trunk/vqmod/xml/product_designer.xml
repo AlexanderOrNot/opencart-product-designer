@@ -288,7 +288,7 @@
 						});
 						function openPopupProductDesigner(){
 							$.colorbox({
-								href: 'index.php?route=pcpb/create&product_id=<?php echo $product_id ?>',
+								href: 'index.php?route=product_designer/create/step1&product_id=<?php echo $product_id ?>',
 								overlayClose: false,
 								opacity: 0.5,
 								iframe: true,
@@ -322,6 +322,7 @@
 			</search>
 			<add>
 				<![CDATA[public function getProductOptionDesigner($product_id) {
+				    $this->load->model('tool/image');
         $product_option_designer_data = array();
 		
 		$product_option_designers = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_option_designer WHERE product_id = '" . (int)$product_id . "'");
