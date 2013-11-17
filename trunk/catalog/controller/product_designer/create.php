@@ -1,12 +1,12 @@
 <?php 
-class ControllerPcpbCreate extends Controller {
+class ControllerProductDesignerCreate extends Controller {
 	private $error = array(); 
      
   	public function index() {
 		$rand = $this->genRndNum(3);
 		$token = time() . $rand;
 		$productId = $this->request->get['product_id'];
-		$this->redirect($this->url->link('pcpb/create/step2', 'token=' . $token . '&product_id=' . $productId));
+		$this->redirect($this->url->link('product_designer/create/step1', 'token=' . $token . '&product_id=' . $productId));
   	}
 	
 	private function genRndNum($iLength = 8)
@@ -25,63 +25,8 @@ class ControllerPcpbCreate extends Controller {
 		phpinfo();
 	}
 	
-	public function step1(){
-
-		$this->language->load('module/pcpb');
-		
-    	$this->data['text_cancel_and_close'] = $this->language->get('text_cancel_and_close');
-    	$this->data['text_next'] = $this->language->get('text_next');
-    	$this->data['text_select_background'] = $this->language->get('text_select_background');
-
-		$this->load->model('setting/setting');
-		$settings = $this->model_setting_setting->getSetting('pcpb');
-		$backgroundOptionId = isset($settings['pcpb_option_background']) ? $settings['pcpb_option_background'] : null;
-
-		$this->load->model('pcpb/pcpb');
-		$options = $this->model_pcpb_pcpb->getProductOptions($this->request->get['product_id']);
-
-		$backgroundOptions = array();
-		foreach ($options as $option) {
-			if($option['option_id'] == $backgroundOptionId)
-			{
-				$backgroundOptions = $option['option_value'];
-				break;
-			}
-		}
-
-		foreach ($backgroundOptions as $backgroundOption) {
-			$size = @getimagesize(DIR_IMAGE . $backgroundOption['image']);
-			
-			$this->data['images'][] = array(
-				'popup' => HTTP_SERVER . 'image/' . $backgroundOption['image'],
-				'thumb' => HTTP_SERVER . 'image/' . $backgroundOption['image'],
-				'name' 	=> $backgroundOption['name'],
-				'points' => $backgroundOption['points'],
-				'price' => floatval($backgroundOption['price']),
-				'width' => $size[0],
-				'height'=> $size[1],
-				'product_option_value_id' => $backgroundOption['product_option_value_id']
-			);
-		}
-
-		//$this->echoDbg($backgroundOptions);exit();
-
-		$this->template = 'default/template/pcpb/step1.tpl';
-		$error = isset($this->request->get['error']) ? $this->request->get['error'] : null;
-		if($error)
-			$this->data['error'] = $error;
-		//$this->data['pcpb_token'] = $this->request->get['token'];
-		$this->data['sizes'] = array(
-			'600x480' => '600 x 480' ,
-			'800x600' => '800 x 600 (+$100)' ,
-			'1024x800' => '1024 x 800 (+$200)' 
-		);
-		$this->data['product_id'] = $this->request->get['product_id'];
-		$this->response->setOutput($this->render());
-	}
-	
 	public function selectImage(){
-		$this->language->load('module/pcpb');
+		$this->language->load('module/product_designer');
 		
     	$this->data['text_Present_Images'] = $this->language->get('text_Present_Images');
     	$this->data['text_Select'] = $this->language->get('text_Select');
@@ -89,10 +34,10 @@ class ControllerPcpbCreate extends Controller {
     	//$this->data['text_Present_Images'] = $this->language->get('text_Present_Images');
     	//$this->data['text_Present_Images'] = $this->language->get('text_Present_Images');
 
-		$presentOptionId = $this->config->get('pcpb_option_preset');
+		$presentOptionId = $this->config->get('product_designer_option_preset');
 
-		$this->load->model('pcpb/pcpb');
-		$options = $this->model_pcpb_pcpb->getProductOptions($this->request->get['product_id']);
+		$this->load->model('product_designer/product_designer');
+		$options = $this->model_product_designer_product_designer->getProductOptions($this->request->get['product_id']);
 
 		$presentOptions = array();
 		foreach ($options as $option) {
@@ -128,12 +73,12 @@ class ControllerPcpbCreate extends Controller {
 			);
 		}
 
-		$this->template = 'default/template/pcpb/selectImage.tpl';
+		$this->template = 'default/template/product_designer/selectImage.tpl';
 		$this->response->setOutput($this->render());
 	}
 	
-	public function step2(){
-		$this->language->load('module/pcpb');
+	public function step1(){
+		$this->language->load('module/product_designer');
 		
     	$this->data['text_edit'] = $this->language->get('text_edit');
     	$this->data['text_copy'] = $this->language->get('text_copy');
@@ -163,28 +108,32 @@ class ControllerPcpbCreate extends Controller {
     	$this->data['text_Dimension_required'] = $this->language->get('text_Dimension_required');
 
         $this->load->model('setting/setting');
-		$settings = $this->model_setting_setting->getSetting('pcpb');
-		$backgroundOptionId = isset($settings['pcpb_option_background']) ? $settings['pcpb_option_background'] : null;
-        
-        $this->load->model('pcpb/pcpb');
-		$options = $this->model_pcpb_pcpb->getProductOptions($this->request->get['product_id']);
-
-		$backgroundOptions = array(); 
-		foreach ($options as $option) {
-			if($option['option_id'] == $backgroundOptionId)
-			{
-				$backgroundOptions = $option['option_value'];
-				break;
+		$settings = $this->model_setting_setting->getSetting('product_designer');
+		
+        $this->load->model('catalog/product');
+		$product_option_designers = $this->model_catalog_product->getProductOptionDesigner($this->request->get['product_id']);
+            
+        $this->data['product_option_designers'] = array();   
+                        
+		foreach ($product_option_designers as $product_option_designer) {
+			if ($product_option_designer['frame_image'] && file_exists(DIR_IMAGE . $product_option_designer['frame_image'])) {
+				$image = $product_option_designer['frame_image'];
+			} else {
+				$image = 'no_image.jpg';
 			}
+            $this->data['product_option_designers'][] = array(
+				'frame_image'               => $image,
+				'thumb'                     => $this->model_tool_image->resize($image, 100, 100),
+				'enable'                    => $product_option_designer['enable'],
+                'allow_adding_text'         => $product_option_designer['allow_adding_text'],
+                'allow_text_effect_border'  => $product_option_designer['allow_text_effect_border'],
+                'allow_text_effect_shadow'  => $product_option_designer['allow_text_effect_shadow'],
+                'allow_text_effect_curve'   => $product_option_designer['allow_text_effect_curve'],
+                'text_color'                => $product_option_designer['text_color']
+			);
+            $size = @getimagesize(DIR_IMAGE . $product_option_designer['frame_image']);
 		}
-
-		foreach ($backgroundOptions as $backgroundOption) {
-			$size = @getimagesize(DIR_IMAGE . $backgroundOption['image']);
-			$product_option_value_id = $backgroundOption['product_option_value_id'];
-            $product_option_price = floatval($backgroundOption['price']);
-            $background = HTTP_SERVER . 'image/' . $backgroundOption['image'];			
-		}
-        
+		
 		$this->data['product_id'] = $this->request->get['product_id'];
         
         $rand = $this->genRndNum(3);
@@ -192,10 +141,10 @@ class ControllerPcpbCreate extends Controller {
 		$product_id = $this->request->get['product_id'];
 		$link = isset($this->request->post['link']) ? $this->request->post['link'] : '';
 		
-		$this->load->model('pcpb/pcpb');
+		$this->load->model('product_designer/product_designer');
 		//$token = isset($this->request->post['link']) ? $this->request->post['link'] : time();
-		if($this->model_pcpb_pcpb->getDataByToken($token)){
-			$this->redirect($this->url->link('pcpb/create/step2', 'token=' . $token . '&product_id=' . $product_id . '&error=token existed'));
+		if($this->model_product_designer_product_designer->getDataByToken($token)){
+			$this->redirect($this->url->link('product_designer/create/step1', 'token=' . $token . '&product_id=' . $product_id . '&error=token existed'));
 		}
         
 		$this->load->model('setting/setting');
@@ -204,7 +153,7 @@ class ControllerPcpbCreate extends Controller {
         foreach ($list_fonts_google as $key=>$name){
             $this->data['list_link_google_fonts_options'][] = array(
                 'key'     =>      $key,
-                'pcpb_fonts_google'     =>      $name
+                'product_designer_fonts_google'     =>      $name
             );    
         }
         
@@ -213,35 +162,21 @@ class ControllerPcpbCreate extends Controller {
         foreach ($list_color_text as $key=>$name){
             $this->data['list_link_color_text_options'][] = array(
                 'key'     =>      $key,
-                'pcpb_color_text'     =>      $name
+                'product_designer_color_text'     =>      $name
             );    
         }
-        		
-        $this->data['pcpb_enable'] = ($this->config->get('pcpb_enable') == 1) ? true : false;
         		
 		if(!$size || !$product_id)
 			die('error');
 		$width = $size[0];
 		$height = $size[1];
 		
-		$this->template = 'default/template/pcpb/step2.tpl';
+		$this->template = 'default/template/product_designer/step1.tpl';
 		$this->data['width'] = $width;
 		$this->data['height'] = $height;
 		$this->data['product_id'] = $product_id;
 		$this->data['link'] = $link;
-		$this->data['product_option_value_id'] = $product_option_value_id;
-		$this->data['product_option_price'] = $product_option_price;
 		
-		if($background)
-			$this->data['background'] = $background;
-
-		$this->load->model('pcpb/pcpb');
-		$settings = $this->model_pcpb_pcpb->getProductPcpbOptions($product_id);
-		//$this->echoDbg($settings);exit();
-		$this->data['add_text_enable'] = $settings['add_text'];
-		$this->data['add_images_enable'] = $settings['add_images'];
-		$this->data['change_bg_enable'] = $settings['upload_background'];
-
 		$this->response->setOutput($this->render());
 	}
 	
@@ -268,9 +203,9 @@ class ControllerPcpbCreate extends Controller {
 			$unencodedData=base64_decode($filteredData);
 			$fileName = time() . '.png';
 			
-			$mainDir = $this->config->get('pcpb_path_folder_save_temprarily');
+			$mainDir = $this->config->get('product_designer_path_folder_save_temprarily');
 			if(!$mainDir || $mainDir == '' || !is_writable(DIR_IMAGE . $mainDir))
-				$mainDir = 'pcpb/temp/';
+				$mainDir = 'product_designer/temp/';
 			
 			$imagePath = DIR_IMAGE . $mainDir . $fileName;
 			$fp = fopen($imagePath , 'wb');
@@ -279,8 +214,8 @@ class ControllerPcpbCreate extends Controller {
 			
 			$token = time();
 			$content = HTTP_SERVER . 'image/' . $mainDir . $fileName;
-			$this->load->model('pcpb/pcpb');
-			$id = $this->model_pcpb_pcpb->insertImage($token, $content);
+			$this->load->model('product_designer/product_designer');
+			$id = $this->model_product_designer_product_designer->insertImage($token, $content);
 			
 			if($id > 0){
 				$res = array(
@@ -301,7 +236,7 @@ class ControllerPcpbCreate extends Controller {
 	}
 	
 	public function finish(){
-		$this->template = 'default/template/pcpb/finish.tpl';
+		$this->template = 'default/template/product_designer/finish.tpl';
 		$token = isset($this->request->get['token'])?$this->request->get['token']:null;
 		$product_id = isset($this->request->get['product_id'])?$this->request->get['product_id']:null;
 		$product_option_value_id = isset($this->request->get['product_option_value_id'])?$this->request->get['product_option_value_id']:null;
@@ -310,10 +245,10 @@ class ControllerPcpbCreate extends Controller {
 		if(!$token || !$product_id)
 			die('no token found');
 			
-		$this->load->model('pcpb/pcpb');
-		$data = $this->model_pcpb_pcpb->getDataByToken($token);
+		$this->load->model('product_designer/product_designer');
+		$data = $this->model_product_designer_product_designer->getDataByToken($token);
 		$this->data['image_link'] = $data['content'];
-		$this->data['view_link'] = $this->url->link('pcpb/view', 'token=' . $token);
+		$this->data['view_link'] = $this->url->link('product_designer/view', 'token=' . $token);
 		$this->data['product_option_value_id'] = $product_option_value_id;
 		$this->data['image_option_id'] = $image_option_id;
 		$this->data['product_option_price'] = $product_option_price;
@@ -326,10 +261,10 @@ class ControllerPcpbCreate extends Controller {
 		$product_price = floatval($product_price) + floatval($product_option_price);
 		$this->data['total_price'] = $this->currency->format($this->tax->calculate($product_price, $product_info['tax_class_id'], $this->config->get('config_tax')));
 
-		if (!$this->session->data['pcpb'])
-			$this->session->data['pcpb'] = array();
-		$this->session->data['pcpb'][$product_id] = array(
-			'url' => $this->url->link('pcpb/view', 'token=' . $token),
+		if (!$this->session->data['product_designer'])
+			$this->session->data['product_designer'] = array();
+		$this->session->data['product_designer'][$product_id] = array(
+			'url' => $this->url->link('product_designer/view', 'token=' . $token),
 			'product_option_value_id' => $product_option_value_id,
 			'image_option_id' => $image_option_id,
 			'token' => $token,
