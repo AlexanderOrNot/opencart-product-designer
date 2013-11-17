@@ -3,6 +3,12 @@
 	<link rel="stylesheet" type="text/css" href="catalog/view/javascript/jquery/colorbox/colorbox.css" media="screen"/>
     <link rel="stylesheet" type="text/css" href="catalog/view/javascript/product_designer/css/fontselector.css" />
 	<link rel="stylesheet" type="text/css" href="catalog/view/theme/default/stylesheet/stylesheet.css"/>
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css">
+	<link type="text/css" href="catalog/view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker.css" rel="stylesheet" />
+	<link type="text/css" href="catalog/view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker-regularfont.css" rel="stylesheet" />
+	<link type="text/css" href="catalog/view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker-glyphicons.css" rel="stylesheet" />
+	<link type="text/css" href="catalog/view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker-fontawesome.css" rel="stylesheet" />
+	
 	<?php if(Count($list_link_google_fonts_options) > 0){?>
 		<link href='http://fonts.googleapis.com/css?family=<?php for ($i = 0; $i < count($list_link_google_fonts_options); $i++) {
                         $fontName = trim($list_link_google_fonts_options[$i]);
@@ -21,6 +27,7 @@
 	<script src="catalog/view/javascript/product_designer/js/utils.js"></script>
 	<script src="catalog/view/javascript/jquery/colorbox/jquery.colorbox-min.js"></script>
     <script src="catalog/view/javascript/product_designer/jquery.fontselector.js"></script>
+	<script src="catalog/view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker.js"></script>
 	<style>       
 		.col-left{
 			float: left;
@@ -33,12 +40,14 @@
 			width: 36%;
 			padding: 20px;
 			text-align: left;
+			border-left: 1px solid #eee;
 		}
 		p{
 			margin-bottom: 10px;
 		}
-		.upload-image, .flip-image, .text-content, .select-font{
-			margin-bottom: 20px;
+		.upload-image, .flip-image, .text-content, .select-font, .text-effect{
+			padding: 20px 0;
+			border-bottom: 1px solid #eee;
 		}
 	</style>
 	
@@ -92,6 +101,7 @@
 			 <?php } ?>
 		 <?php } ?>
 		});
+		
 	</script>
 	
 </head>
@@ -120,9 +130,36 @@
 					<div class="arrow-down"></div>
 				</div>
 			</div>
-			<div>
+			<div class="select-font">
+				<p><strong>Select color</strong></p> 
+				<select id="colorpicker_picker">
+				  <option value="#ac725e">#ac725e</option>
+				  <option value="#d06b64">#d06b64</option>
+				  <option value="#f83a22">#f83a22</option>
+				  <option value="#fa573c">#fa573c</option>
+				  <option value="#ff7537">#ff7537</option>
+				  <option value="#ffad46">#ffad46</option>
+				  <option value="#42d692">#42d692</option>
+				  <option value="#16a765">#16a765</option>
+				  <option value="#7bd148">#7bd148</option>
+				  <option value="#b3dc6c">#b3dc6c</option>
+				  <option value="#fbe983">#fbe983</option>
+				  <option value="#fad165">#fad165</option>
+				  <option value="#92e1c0">#92e1c0</option>
+				  <option value="#9fe1e7">#9fe1e7</option>
+				</select>
+			</div>
+			<div class="text-effect">
+				<p><strong>Text effect</strong></p> 
+			</div>
+			<div style="margin-top:20px">
 				<input class="button" type="submit" value="Next" />
 			</div>
 		</form>
 	</div>
+<script type="text/javascript">
+	//BEGIN ADD COLOR PICKER
+	$('#colorpicker_picker').simplecolorpicker({picker: true, theme: 'fontawesome'});
+	//END ADD COLOR PICKER
+</script>
 </body>
