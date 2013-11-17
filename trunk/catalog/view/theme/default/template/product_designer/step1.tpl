@@ -4,8 +4,9 @@
     <link rel="stylesheet" type="text/css" href="catalog/view/javascript/product_designer/css/fontselector.css" />
 	<link rel="stylesheet" type="text/css" href="catalog/view/theme/default/stylesheet/stylesheet.css"/>
 	<?php if(Count($list_link_google_fonts_options) > 0){?>
-		<link href='http://fonts.googleapis.com/css?family=<?php foreach ($list_link_google_fonts_options as $list_link_google_fonts) { 
-                echo str_replace(" ", "+", $list_link_google_fonts['key'])."|";
+		<link href='http://fonts.googleapis.com/css?family=<?php for ($i = 0; $i < count($list_link_google_fonts_options); $i++) {
+                        $fontName = trim($list_link_google_fonts_options[$i]);
+                echo str_replace(" ", "+", $fontName)."|";
             } ?>' rel='stylesheet' type='text/css'/>
 	<?php } ?>
 	<script src="catalog/view/javascript/product_designer/jquery-1.7.2.min.js"></script>      
@@ -47,24 +48,25 @@
 				if(isset($product_option_designer['enable']) && $product_option_designer['enable'] == '1') { ?>      
 				$('#pd-text-font').fontSelector({
 					'hide_fallbacks' : true,
-					'initial' : '<?php if(Count($list_link_google_fonts_options) > 0){ echo $list_link_google_fonts_options[0]['key']; }?>,serif',
+					'initial' : '<?php if(Count($list_link_google_fonts_options) > 0){ echo trim($list_link_google_fonts_options[0]); }?>,serif',
 					'selected' : function() {},
 					'fonts' : [
 						<?php $count = 0; 
 						if(Count($list_link_google_fonts_options) > 0){ 
-							foreach ($list_link_google_fonts_options as $list_link_google_fonts) { 
+							for ($i = 0; $i < count($list_link_google_fonts_options); $i++) {
+                                $fontName = trim($list_link_google_fonts_options[$i]); 
 								if($count != count($list_link_google_fonts_options)-1){ ?>
-								'<?php echo $list_link_google_fonts['key'];?>,serif',                
+								'<?php echo $fontName;?>,serif',                
 							<?php $count ++; } 
 							} ?>			
-							'<?php echo $list_link_google_fonts_options[count($list_link_google_fonts_options)-1]['key'];?>,serif'			
+							'<?php echo trim($list_link_google_fonts_options[count($list_link_google_fonts_options)-1]);?>,serif'			
 						<?php } ?>
 						]
 				});
 			<?php } else { ?>
 				$('#pd-text-font').fontSelector({
 					'hide_fallbacks' : true,
-					'initial' : '<?php if(Count($list_link_google_fonts_options) > 0){ echo $list_link_google_fonts_options[0]['key']; }?>,serif',
+					'initial' : '<?php if(Count($list_link_google_fonts_options) > 0){ echo trim($list_link_google_fonts_options[0]); }?>,serif',
 					'selected' : function() {},
 					'fonts' : [
 						'Arial,serif',
@@ -76,13 +78,14 @@
 						'Lucida Console,serif',
 						'Verdana,serif',
 						<?php $count = 0; 
-						if(Count($list_link_google_fonts_options) > 0){
-							foreach ($list_link_google_fonts_options as $list_link_google_fonts) { 
+						if(Count($list_link_google_fonts_options) > 0){ 
+							for ($i = 0; $i < count($list_link_google_fonts_options); $i++) {
+                                $fontName = trim($list_link_google_fonts_options[$i]);  
 								if($count != count($list_link_google_fonts_options)-1){ ?>
-								'<?php echo $list_link_google_fonts['key'];?>,serif',                
+								'<?php echo $fontName;?>,serif',                
 							<?php $count ++; } 
 							} ?>			
-							'<?php echo $list_link_google_fonts_options[count($list_link_google_fonts_options)-1]['key'];?>,serif'
+							'<?php echo trim($list_link_google_fonts_options[count($list_link_google_fonts_options)-1]);?>,serif'
 						<?php } ?>
 						]
 				});
