@@ -297,18 +297,15 @@
 								height: '100%',
 								onLoad: function() {
 									
-								},
-								onComplete: function () {
-									$("#cboxClose").click(function (e) {
-										e.stopPropagation();
-										if (confirm('Are you sure you want to close Product Designer?')) {
-											$.colorbox.close();
-											$("#cboxClose").unbind();
-										}
-									});
 								}
 							});
 						}
+						var originalClose = $.colorbox.close;
+						$.colorbox.close = function(){
+						  if (confirm('Are you sure you want to close Product Designer?')) {
+							originalClose();
+						  }
+						};
 					</script>
 					<?php } ?>
 				]]>
