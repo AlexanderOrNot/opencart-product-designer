@@ -279,4 +279,68 @@
 			</add>
 		</operation>
 	</file>
+    <file name="catalog/model/catalog/product.php">
+		<operation>
+			<search position="before" index="1">
+				<![CDATA[public function getProductLayoutId($product_id) {]]>
+			</search>
+			<add>
+				<![CDATA[public function getProductOptionDesigner($product_id) {
+        $product_option_designer_data = array();
+		
+		$product_option_designers = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_option_designer WHERE product_id = '" . (int)$product_id . "'");
+        foreach ($product_option_designers->rows as $product_option_designer) {
+            if ($product_option_designer['frame_image'] && file_exists(DIR_IMAGE . $product_option_designer['frame_image'])) {
+				$image = $product_option_designer['frame_image'];
+			} else {
+				$image = 'no_image.jpg';
+			}
+            $product_option_designer_data[] = array(
+    			'frame_image'               => $image,
+    			'thumb'                     => $this->model_tool_image->resize($image, 100, 100),
+    			'enable'                    => $product_option_designer['enable'],
+                'allow_adding_text'         => $product_option_designer['allow_adding_text'],
+                'allow_text_effect_border'  => $product_option_designer['allow_text_effect_border'],
+                'allow_text_effect_shadow'  => $product_option_designer['allow_text_effect_shadow'],
+                'allow_text_effect_curve'   => $product_option_designer['allow_text_effect_curve'],
+                'text_color'                => $product_option_designer['text_color']
+    		);
+        }
+        return $product_option_designer_data;
+    }
+                ]]>
+			</add>
+		</operation>
+    </file>
+    <file name="catalog/controller/catalog/product.php">
+		<operation>
+			<search position="before" index="1">
+				<![CDATA[$this->data['options'] = array();]]>
+			</search>
+			<add>
+				<![CDATA[$product_option_designers = $this->model_catalog_product->getProductOptionDesigner($this->request->get['product_id']);
+            
+            $this->data['product_option_designers'] = array();   
+                            
+    		foreach ($product_option_designers as $product_option_designer) {
+    			if ($product_option_designer['frame_image'] && file_exists(DIR_IMAGE . $product_option_designer['frame_image'])) {
+    				$image = $product_option_designer['frame_image'];
+    			} else {
+    				$image = 'no_image.jpg';
+    			}
+                $this->data['product_option_designers'][] = array(
+    				'frame_image'               => $image,
+    				'thumb'                     => $this->model_tool_image->resize($image, 100, 100),
+    				'enable'                    => $product_option_designer['enable'],
+                    'allow_adding_text'         => $product_option_designer['allow_adding_text'],
+                    'allow_text_effect_border'  => $product_option_designer['allow_text_effect_border'],
+                    'allow_text_effect_shadow'  => $product_option_designer['allow_text_effect_shadow'],
+                    'allow_text_effect_curve'   => $product_option_designer['allow_text_effect_curve'],
+                    'text_color'                => $product_option_designer['text_color']
+    			);
+    		}
+                ]]>
+			</add>
+		</operation>
+    </file>
 </modification>
