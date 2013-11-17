@@ -271,11 +271,37 @@
             </search>
             <add>
                 <![CDATA[
-                    <div class="product_designer gteie9">
-                    	<a href="javascript:void(0)" onclick="openPopupProductDesigner();" id="product_designer_iframe">
-                    		<input type="button" value="Design your own Iphone"  class="button">
-                    	</a>
-                    </div>]]>
+					<?php foreach ($product_option_designers as $product_option_designer) { ?>
+						<?php echo $product_option_designer['enable']; ?>
+						<?php if(isset($product_option_designer['enable']) && $product_option_designer['enable'] == '1') { ?>
+							<div class="product_designer">
+								<a href="javascript:void(0)" onclick="openPopupProductDesigner();" id="product_designer_iframe">
+									<input type="button" value="Design your own Iphone"  class="button">
+								</a>
+							</div>
+						<?php } ?>
+					<script>
+						$(document).ready(function() {
+						
+						});
+						function openPopupProductDesigner(){
+							
+							$.colorbox({
+								//href: 'index.php?route=pcpb/create&product_id=<?php echo $product_id ?>',
+								overlayClose: false,
+								opacity: 0.5,
+								iframe: true,
+								open: true,
+								width: '90%',
+								height: '70%',
+								onLoad: function() {
+									$('#cboxClose').remove();
+								}
+							});
+						}
+					</script>
+					<?php } ?>
+				]]>
 			</add>
 		</operation>
 	</file>
