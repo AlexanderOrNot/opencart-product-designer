@@ -148,23 +148,12 @@ class ControllerProductDesignerCreate extends Controller {
 		}
         
 		$this->load->model('setting/setting');
-        $list_fonts_google = $this->model_setting_setting->getSetting('fonts_google');
-        $this->data['list_link_google_fonts_options'] = array();
-        foreach ($list_fonts_google as $key=>$name){
-            $this->data['list_link_google_fonts_options'][] = array(
-                'key'     =>      $key,
-                'product_designer_fonts_google'     =>      $name
-            );    
-        }
         
-        $list_color_text = $this->model_setting_setting->getSetting('color_text');
+        $this->data['list_link_google_fonts_options'] = array();
+        $this->data['list_link_google_fonts_options'] = explode(',',$this->config->get('pd_google_font'));
+        
         $this->data['list_link_color_text_options'] = array();
-        foreach ($list_color_text as $key=>$name){
-            $this->data['list_link_color_text_options'][] = array(
-                'key'     =>      $key,
-                'product_designer_color_text'     =>      $name
-            );    
-        }
+        $this->data['list_link_color_text_options'] = explode(',',$this->config->get('pd_text_color'));
         		
 		if(!$size || !$product_id)
 			die('error');
