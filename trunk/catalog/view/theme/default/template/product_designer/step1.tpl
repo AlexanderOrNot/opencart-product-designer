@@ -133,20 +133,10 @@
 			<div class="select-font">
 				<p><strong>Select color</strong></p> 
 				<select id="colorpicker_picker">
-				  <option value="#ac725e">#ac725e</option>
-				  <option value="#d06b64">#d06b64</option>
-				  <option value="#f83a22">#f83a22</option>
-				  <option value="#fa573c">#fa573c</option>
-				  <option value="#ff7537">#ff7537</option>
-				  <option value="#ffad46">#ffad46</option>
-				  <option value="#42d692">#42d692</option>
-				  <option value="#16a765">#16a765</option>
-				  <option value="#7bd148">#7bd148</option>
-				  <option value="#b3dc6c">#b3dc6c</option>
-				  <option value="#fbe983">#fbe983</option>
-				  <option value="#fad165">#fad165</option>
-				  <option value="#92e1c0">#92e1c0</option>
-				  <option value="#9fe1e7">#9fe1e7</option>
+				  <?php for ($i = 0; $i < count($list_link_color_text_options); $i++) {
+                        $colorName = str_replace(" ", "", $list_link_color_text_options[$i]);?>
+				        <option value="<?php echo $colorName;?>"><?php echo $colorName;?></option>
+                  <?php } ?>				  
 				</select>
 			</div>
 			<div class="text-effect">
