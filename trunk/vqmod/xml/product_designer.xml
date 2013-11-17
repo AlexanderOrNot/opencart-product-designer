@@ -272,30 +272,40 @@
             <add>
                 <![CDATA[
 					<?php foreach ($product_option_designers as $product_option_designer) { ?>
-						<?php echo $product_option_designer['enable']; ?>
 						<?php if(isset($product_option_designer['enable']) && $product_option_designer['enable'] == '1') { ?>
-							<div class="product_designer">
+							<div class="product_designer" style="margin-bottom:10px;">
 								<a href="javascript:void(0)" onclick="openPopupProductDesigner();" id="product_designer_iframe">
-									<input type="button" value="Design your own Iphone"  class="button">
+									<input type="button" value="Design your own <?php echo $heading_title; ?>"  class="button">
 								</a>
 							</div>
 						<?php } ?>
 					<script>
 						$(document).ready(function() {
-						
+							<?php if(isset($product_option_designer['enable']) && $product_option_designer['enable'] == '1') { ?>
+								$('.options').css('display','none');
+								$('.cart').css('display','none');
+							<?php } ?>
 						});
 						function openPopupProductDesigner(){
-							
 							$.colorbox({
-								//href: 'index.php?route=pcpb/create&product_id=<?php echo $product_id ?>',
+								href: 'index.php?route=pcpb/create&product_id=<?php echo $product_id ?>',
 								overlayClose: false,
 								opacity: 0.5,
 								iframe: true,
 								open: true,
-								width: '90%',
-								height: '70%',
+								width: '100%',
+								height: '100%',
 								onLoad: function() {
-									$('#cboxClose').remove();
+									
+								},
+								onComplete: function () {
+									$("#cboxClose").click(function (e) {
+										e.stopPropagation();
+										if (confirm('Are you sure you want to close Product Designer?')) {
+											$.colorbox.close();
+											$("#cboxClose").unbind();
+										}
+									});
 								}
 							});
 						}
@@ -338,7 +348,7 @@
 			</add>
 		</operation>
     </file>
-    <file name="catalog/controller/catalog/product.php">
+    <file name="catalog/controller/product/product.php">
 		<operation>
 			<search position="before" index="1">
 				<![CDATA[$this->data['options'] = array();]]>
