@@ -19,7 +19,7 @@
 	<script src="catalog/view/javascript/product_designer/fabric.js"></script>
 	<script src="catalog/view/javascript/product_designer/canvas2image.js"></script>
 	<script src="catalog/view/javascript/product_designer/base64.js"></script>
-	<script src="catalog/view/javascript/product_designer/PCPB.js"></script>
+	<script src="catalog/view/javascript/product_designer/product_designer.js"></script>
 	<script src="catalog/view/javascript/product_designer/fabric.curvedText.js"></script>
 	<script src="catalog/view/javascript/product_designer/jquery.ajaxupload.js"></script>  
 	<script src="catalog/view/javascript/product_designer/js/colorpicker.js"></script>
@@ -107,7 +107,7 @@
 </head>
 <body>
 	<div class="col-left">
-		sdkfjdks
+		<canvas id="pd_canvas" width="100%" height="100%" style="border: 1px solid #eee"></canvas>
 	</div>
 	<div class="col-right">
 		<form method="post" action="index.php?route=product_designer/create/step2">
@@ -151,5 +151,14 @@
 	//BEGIN ADD COLOR PICKER
 	$('#colorpicker_picker').simplecolorpicker({picker: true, theme: 'fontawesome'});
 	//END ADD COLOR PICKER
+	
+	//init for canvas manager
+	var pd = new Product_designer('pd_canvas');
+	alert($background);
+	<?php if (!empty($background)) { ?>
+		var originBG = '<?php echo $background;?>';
+		pd.setBackgroundImage(originBG);
+	<?php } ?>
+	
 </script>
 </body>
