@@ -107,7 +107,7 @@
 </head>
 <body>
 	<div class="col-left">
-		<canvas id="pd_canvas" width="100%" height="100%" style="border: 1px solid #eee"></canvas>
+		<canvas id="pd_canvas" width="1000" height="500" style="border: 1px solid #eee"></canvas>
 	</div>
 	<div class="col-right">
 		<form method="post" action="index.php?route=product_designer/create/step2">
@@ -154,7 +154,6 @@
 	
 	//init for canvas manager
 	var pd = new Product_designer('pd_canvas');
-	alert($background);
 	<?php if (!empty($background)) { ?>
 		var originBG = '<?php echo $background;?>';
 		pd.setBackgroundImage(originBG);
