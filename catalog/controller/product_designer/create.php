@@ -154,7 +154,9 @@ class ControllerProductDesignerCreate extends Controller {
         
         $this->data['list_link_color_text_options'] = array();
         $this->data['list_link_color_text_options'] = explode(',',$this->config->get('pd_text_color'));
-        		
+		
+		$this->data['background'] = HTTP_SERVER . 'image/' . $image;
+		
 		if(!$size || !$product_id)
 			die('error');
 		$width = $size[0];
