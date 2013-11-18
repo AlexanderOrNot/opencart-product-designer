@@ -131,6 +131,8 @@ class ControllerProductDesignerCreate extends Controller {
                 'allow_text_effect_curve'   => $product_option_designer['allow_text_effect_curve'],
                 'text_color'                => $product_option_designer['text_color']
 			);
+			
+			$this->data['background'] = HTTP_SERVER . 'image/' . $image;
             $size = @getimagesize(DIR_IMAGE . $product_option_designer['frame_image']);
 		}
 		
@@ -154,8 +156,6 @@ class ControllerProductDesignerCreate extends Controller {
         
         $this->data['list_link_color_text_options'] = array();
         $this->data['list_link_color_text_options'] = explode(',',$this->config->get('pd_text_color'));
-		
-		$this->data['background'] = HTTP_SERVER . 'image/' . $image;
 		
 		if(!$size || !$product_id)
 			die('error');
