@@ -1,4 +1,4 @@
-function PCPB(id, viewOnly){
+function Product_designer(id, viewOnly){
 	var THIS = this;
 	if(id == null || id == '')
 	{	
