@@ -107,7 +107,7 @@
 </head>
 <body>
 	<div class="col-left">
-		<canvas id="pd_canvas" width="1000" height="500" style="border: 1px solid #eee"></canvas>
+		<canvas id="pd_canvas" width="<?php echo $width; ?>" height="<?php echo $height; ?>" style="border: 1px solid #eee"></canvas>
 	</div>
 	<div class="col-right">
 		<form method="post" action="index.php?route=product_designer/create/step2">
@@ -154,10 +154,16 @@
 	
 	//init for canvas manager
 	var pd = new Product_designer('pd_canvas');
+	pd.width  = <?php echo $width;?>;
+	pd.height = <?php echo $height;?>;
+	var canvasScale = 1;
+	var SCALE_FACTOR = 1.8;
+	canvasScale = canvasScale / SCALE_FACTOR;
+    pd.setHeight(pd.height * (1 / SCALE_FACTOR));
+    pd.setWidth(pd.width * (1 / SCALE_FACTOR));
 	<?php if (!empty($background)) { ?>
 		var originBG = '<?php echo $background;?>';
 		pd.setBackgroundImage(originBG);
 	<?php } ?>
-	
 </script>
 </body>
