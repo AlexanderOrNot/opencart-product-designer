@@ -95,6 +95,12 @@ class ControllerProductDesignerCreate extends Controller {
     	$this->data['text_Flip'] = $this->language->get('text_Flip');
     	$this->data['text_Horizontal'] = $this->language->get('text_Horizontal');
     	$this->data['text_Vertical'] = $this->language->get('text_Vertical');
+		$this->data['text_Border'] = $this->language->get('text_Border');
+    	$this->data['text_Shadow'] = $this->language->get('text_Shadow');
+		$this->data['text_Curve'] = $this->language->get('text_Curve');
+		$this->data['text_Remove_Border'] = $this->language->get('text_Remove_Border');
+    	$this->data['text_Remove_Shadow'] = $this->language->get('text_Remove_Shadow');
+		$this->data['text_Remove_Curve'] = $this->language->get('text_Remove_Curve');
     	$this->data['text_cancel_and_close'] = $this->language->get('text_cancel_and_close');
     	$this->data['text_Back'] = $this->language->get('text_Back');
     	$this->data['text_Custom_your_product'] = $this->language->get('text_Custom_your_product');
