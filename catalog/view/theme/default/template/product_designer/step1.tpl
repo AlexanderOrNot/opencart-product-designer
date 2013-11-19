@@ -129,7 +129,7 @@
 		<canvas id="pd_canvas" width="<?php echo $width; ?>" height="<?php echo $height; ?>"></canvas>
 	</div>
 	<div class="col-right">
-		<form method="post" action="index.php?route=product_designer/create/step2">
+		<form method="post" action="index.php?route=product_designer/create/step2&product_id=<?php echo $product_id; ?>">
 			<div class="upload-image">
 				<p><strong>Upload image</strong></p> 
 				<input id="pd-upload-image" onclick="return false;" type="file"/>
