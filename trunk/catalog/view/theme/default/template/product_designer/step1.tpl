@@ -32,8 +32,8 @@
 		.col-left{
 			float: left;
 			width: 56%;
-			background: #298892;
 			padding: 20px;
+			display: block;
 		}
 		.col-right{
 			float: right;
@@ -42,12 +42,31 @@
 			text-align: left;
 			border-left: 1px solid #eee;
 		}
+		.canvas-container{
+			margin: 0 auto;
+		}
 		p{
 			margin-bottom: 10px;
 		}
 		.upload-image, .flip-image, .text-content, .select-font, .text-effect{
 			padding: 20px 0;
 			border-bottom: 1px solid #eee;
+		}
+		.upload-image{
+			padding-top: 0;
+		}
+		#option-text-border, #option-text-shadow, #option-text-curve{
+			border: 1px solid #eee;
+			padding: 10px 15px;
+			background: #fafafa;
+			display: none;
+			margin-top: 20px;
+		}
+		table tr td{
+			padding: 5px 10px;
+		}
+		table tr td h1{
+			margin-bottom: 0;
 		}
 	</style>
 	
@@ -107,7 +126,7 @@
 </head>
 <body>
 	<div class="col-left">
-		<canvas id="pd_canvas" width="<?php echo $width; ?>" height="<?php echo $height; ?>" style="border: 1px solid #eee"></canvas>
+		<canvas id="pd_canvas" width="<?php echo $width; ?>" height="<?php echo $height; ?>"></canvas>
 	</div>
 	<div class="col-right">
 		<form method="post" action="index.php?route=product_designer/create/step2">
@@ -117,7 +136,7 @@
 			</div>
 			<div class="flip-image">
 				<p><strong>Flip image</strong></p> 
-				<input id="pd-image_horizontal" type="button" value="<?php echo $text_Horizontal; ?>" class="button" onclick="pd.flipHorizontalImage()"/>
+				<input id="pd-image-horizontal" type="button" value="<?php echo $text_Horizontal; ?>" class="button" onclick="pd.flipHorizontalImage()"/>
 				<input id="pd-image-vertical" type="button" value="<?php echo $text_Vertical; ?>" class="button" onclick="pd.flipVerticalImage()"/>
 			</div>
 			<div class="text-content">
@@ -130,17 +149,63 @@
 					<div class="arrow-down"></div>
 				</div>
 			</div>
-			<div class="select-font">
-				<p><strong>Select color</strong></p> 
-				<select id="colorpicker_picker">
-				  <?php for ($i = 0; $i < count($list_link_color_text_options); $i++) {
-                        $colorName = str_replace(" ", "", $list_link_color_text_options[$i]);?>
-				        <option value="<?php echo $colorName;?>"><?php echo $colorName;?></option>
-                  <?php } ?>				  
-				</select>
-			</div>
+			
 			<div class="text-effect">
 				<p><strong>Text effect</strong></p> 
+				<input id="pd-text-border" type="button" value="<?php echo $text_Border; ?>" class="button" onclick="pd.textBorder()"/>
+				<input id="pd-text-shadow" type="button" value="<?php echo $text_Shadow; ?>" class="button" onclick="pd.textShadow()"/>
+				<input id="pd-text-curve" type="button" value="<?php echo $text_Curve; ?>" class="button" onclick="pd.textCurve()"/>
+				
+				<div id="option-text-border">
+					<table>
+						<tr>
+							<td>Color:</td>
+							<td><input id="pd-border-color" type="text" value="#FFF" onchange="pd.borderText();" onkeyup="pd.borderText();"/></td>
+							<td rowspan="2" style="border-left: 1px solid #ddd; padding-left: 55px;"><h1><?php echo $text_Border; ?></h1></td>
+						</tr>
+						<tr>
+							<td>Border width:</td>
+							<td><input type="range" min="1" max="5" value="1" id="pd-stroke-width" onchange="pd.borderText();" /></td>
+						</tr>
+					</table>
+				</div>
+				
+				<div id="option-text-shadow">
+					<table>
+						<tr>
+							<td>Color:</td>
+							<td><input id="pd-shadow-color" type="text" value="#FFF" onchange="pd.shadowText();" onkeyup="pd.shadowText();"/></td>
+							<td rowspan="4" style="border-left: 1px solid #ddd; padding-left: 33px;"><h1><?php echo $text_Shadow; ?></h1></td>
+						</tr>
+						<tr>
+							<td>Horizontal offset:</td>
+							<td><input type="range"  min="-20" max="20" value="1" id="pd-horizontal-offset" onchange="pd.shadowText();" /></td>
+						</tr>
+						<tr>
+							<td>Vertical offset:</td>
+							<td><input type="range"  min="-20" max="20" value="1" id="pd-vertical-offset" onchange="pd.shadowText();" /></td>
+						</tr>
+						<tr>
+							<td>Blur size:</td>
+							<td><input type="range"  min="1" max="20" value="5" id="pd-blur-size" onchange="pd.shadowText();" /></td>
+						</tr>
+					</table>
+				</div>
+				
+				<div id="option-text-curve">
+					<table>
+						<tr>
+							<td>Spacing: </td>
+							<td><input type="range" min="1" max="5" value="1" id="pd-spacing" onchange="pd.curveText();" /></td>
+							<td rowspan="2" style="border-left: 1px solid #ddd; padding-left: 75px;"><h1><?php echo $text_Curve; ?></h1></td>
+						</tr>
+						<tr>
+							<td>Radius: </td>
+							<td><input type="range" min="1" max="5" value="1" id="pd-radius" onchange="pd.curveText();" /></td>
+						</tr>
+					</table>
+				</div>
+				
 			</div>
 			<div style="margin-top:20px">
 				<input class="button" type="submit" value="Next" />
@@ -151,6 +216,79 @@
 	//BEGIN ADD COLOR PICKER
 	$('#colorpicker_picker').simplecolorpicker({picker: true, theme: 'fontawesome'});
 	//END ADD COLOR PICKER
+	
+	$('#pd-border-color').ColorPicker({
+		color: '#fff',
+		onShow: function (colpkr) {
+			$(colpkr).fadeIn(500);
+			return false;
+		},
+		onHide: function (colpkr) {
+			$(colpkr).fadeOut(500);
+			return false;
+		},
+		onChange: function (hsb, hex, rgb) {
+			$('#pd-border-color').val('#' + hex);
+			pd.borderText();
+		},
+		onSubmit: function(hsb, hex, rgb) {
+			$('#pd-border-color').val('#' + hex);
+			pd.borderText();
+		}
+	});
+	
+	$('#pd-shadow-color').ColorPicker({
+		color: '#fff',
+		onShow: function (colpkr) {
+			$(colpkr).fadeIn(500);
+			return false;
+		},
+		onHide: function (colpkr) {
+			$(colpkr).fadeOut(500);
+			return false;
+		},
+		onChange: function (hsb, hex, rgb) {
+			$('#pd-shadow-color').val('#' + hex);
+			pd.shadowText();
+		},
+		onSubmit: function(hsb, hex, rgb) {
+			$('#pd-shadow-color').val('#' + hex);
+			pd.shadowText();
+		}
+	});
+	
+	$('#pd-text-border').click(function() {
+		$('#option-text-border').slideToggle();
+		if($('#pd-text-border').val() == '<?php echo $text_Border; ?>'){
+			$('#pd-text-border').val("<?php echo $text_Remove_Border; ?>");
+		}
+		else if($('#pd-text-border').val() == '<?php echo $text_Remove_Border; ?>'){
+			$('#pd-text-border').val("<?php echo $text_Border; ?>");
+		}
+		pd.borderText();
+	});
+	
+	$('#pd-text-shadow').click(function() {
+		$('#option-text-shadow').slideToggle();
+		if($('#pd-text-shadow').val() == '<?php echo $text_Shadow; ?>'){
+			$('#pd-text-shadow').val("<?php echo $text_Remove_Shadow; ?>");
+		}
+		else if($('#pd-text-shadow').val() == '<?php echo $text_Remove_Shadow; ?>'){
+			$('#pd-text-shadow').val("<?php echo $text_Shadow; ?>");
+		}
+		pd.shadowText();
+	});
+	
+	$('#pd-text-curve').click(function() {
+		$('#option-text-curve').slideToggle();
+		if($('#pd-text-curve').val() == '<?php echo $text_Curve; ?>'){
+			$('#pd-text-curve').val("<?php echo $text_Remove_Curve; ?>");
+		}
+		else if($('#pd-text-curve').val() == '<?php echo $text_Remove_Curve; ?>'){
+			$('#pd-text-curve').val("<?php echo $text_Curve; ?>");
+		}
+		pd.curveText();
+	});
 	
 	//init for canvas manager
 	var pd = new Product_designer('pd_canvas');
