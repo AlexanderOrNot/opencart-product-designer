@@ -177,6 +177,85 @@ class ControllerProductDesignerCreate extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
+    public function step2(){
+		$this->language->load('module/product_designer');        
+        $this->language->load('product/product');
+        
+        $this->load->model('tool/image');
+        $this->load->model('catalog/product');
+        
+        if (isset($this->request->get['product_id'])) {
+			$product_id = (int)$this->request->get['product_id'];
+		} else {
+			$product_id = 0;
+		}
+		
+		$this->load->model('catalog/product');
+		
+		$product_info = $this->model_catalog_product->getProduct($product_id);
+        
+        $this->data['text_select'] = $this->language->get('text_select');
+        $this->data['text_option'] = $this->language->get('text_option');
+		$this->data['text_qty'] = $this->language->get('text_qty');
+		$this->data['text_minimum'] = sprintf($this->language->get('text_minimum'), $product_info['minimum']);
+        $this->data['button_cart'] = $this->language->get('button_cart');
+        $this->data['button_upload'] = $this->language->get('button_upload');   
+        
+        $this->data['options'] = array();
+			
+		foreach ($this->model_catalog_product->getProductOptions($product_id) as $option) { 
+			if ($option['type'] == 'select' || $option['type'] == 'radio' || $option['type'] == 'checkbox' || $option['type'] == 'image') { 
+				$option_value_data = array();
+				
+				foreach ($option['option_value'] as $option_value) {
+					if (!$option_value['subtract'] || ($option_value['quantity'] > 0)) {
+						if ((($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) && (float)$option_value['price']) {
+							$price = $this->currency->format($this->tax->calculate($option_value['price'], $product_info['tax_class_id'], $this->config->get('config_tax')));
+						} else {
+							$price = false;
+						}
+						
+						$option_value_data[] = array(
+							'product_option_value_id' => $option_value['product_option_value_id'],
+							'option_value_id'         => $option_value['option_value_id'],
+							'name'                    => $option_value['name'],
+							'image'                   => $this->model_tool_image->resize($option_value['image'], 50, 50),
+							'price'                   => $price,
+							'price_prefix'            => $option_value['price_prefix']
+						);
+					}
+				}
+				
+				$this->data['options'][] = array(
+					'product_option_id' => $option['product_option_id'],
+					'option_id'         => $option['option_id'],
+					'name'              => $option['name'],
+					'type'              => $option['type'],
+					'option_value'      => $option_value_data,
+					'required'          => $option['required']
+				);					
+			} elseif ($option['type'] == 'text' || $option['type'] == 'textarea' || $option['type'] == 'file' || $option['type'] == 'date' || $option['type'] == 'datetime' || $option['type'] == 'time') {
+				$this->data['options'][] = array(
+					'product_option_id' => $option['product_option_id'],
+					'option_id'         => $option['option_id'],
+					'name'              => $option['name'],
+					'type'              => $option['type'],
+					'option_value'      => $option['option_value'],
+					'required'          => $option['required']
+				);						
+			}
+		}
+        if ($product_info['minimum']) {
+			$this->data['minimum'] = $product_info['minimum'];
+		} else {
+			$this->data['minimum'] = 1;
+		}
+        
+		$this->template = 'default/template/product_designer/step2.tpl';
+		
+		$this->response->setOutput($this->render());
+        
+    }
 	public function step3(){
 		if(isset($this->request->post['imageData'])){
 			$imageData = isset($this->session->data['imageData']) ? $this->session->data['imageData'] : '';
