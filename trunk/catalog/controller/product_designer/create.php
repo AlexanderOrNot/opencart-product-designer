@@ -199,7 +199,9 @@ class ControllerProductDesignerCreate extends Controller {
 		$this->data['text_qty'] = $this->language->get('text_qty');
 		$this->data['text_minimum'] = sprintf($this->language->get('text_minimum'), $product_info['minimum']);
         $this->data['button_cart'] = $this->language->get('button_cart');
-        $this->data['button_upload'] = $this->language->get('button_upload');   
+        $this->data['button_upload'] = $this->language->get('button_upload'); 
+		$this->data['text_Finish_Cart'] = $this->language->get('text_Finish_Cart');
+		$this->data['text_Back'] = $this->language->get('text_Back');		
         
         $this->data['options'] = array();
 			
