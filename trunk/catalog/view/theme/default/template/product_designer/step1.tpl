@@ -77,7 +77,7 @@
 				$('#pd-text-font').fontSelector({
 					'hide_fallbacks' : true,
 					'initial' : '<?php if(Count($list_link_google_fonts_options) > 0){ echo trim($list_link_google_fonts_options[0]); }?>,serif',
-					'selected' : function() {},
+					'selected' : function() {pd.saveTextSetting();},
 					'fonts' : [
 						<?php $count = 0; 
 						if(Count($list_link_google_fonts_options) > 0){ 
@@ -95,7 +95,7 @@
 				$('#pd-text-font').fontSelector({
 					'hide_fallbacks' : true,
 					'initial' : '<?php if(Count($list_link_google_fonts_options) > 0){ echo trim($list_link_google_fonts_options[0]); }?>,serif',
-					'selected' : function() {},
+					'selected' : function() {pd.saveTextSetting();},
 					'fonts' : [
 						'Arial,serif',
 						'Times New Roman,serif',
@@ -132,7 +132,7 @@
 		<form method="post" action="index.php?route=product_designer/create/step2&product_id=<?php echo $product_id; ?>">
 			<div class="upload-image">
 				<p><strong>Upload image</strong></p> 
-				<input id="pd-upload-image" onclick="return false;" type="file"/>
+				<input type="button" class="button" id="pd-upload-image" value="Browse" />
 			</div>
 			<div class="flip-image">
 				<p><strong>Flip image</strong></p> 
@@ -141,7 +141,34 @@
 			</div>
 			<div class="text-content">
 				<p><strong>Enter text</strong></p> 
-				<textarea rows="5" cols="50"></textarea>
+				<textarea id="pd-text-content" rows="5" cols="50" onkeyup="pd.saveTextSetting();" onchange="pd.saveTextSetting();"></textarea>
+			</div>
+			<div class="text-fontsize">
+				<p><strong>Font size</strong></p> 
+				<select id="pd-text-fontsize" style="width: 153px;padding: 1px 0px;margin-left: 2px;" onchange="pd.saveTextSetting();">
+					<?php for($i = 1; $i<101; $i++) {?>
+						<option><?php echo $i;?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="text-color">
+				<p><strong>Select color</strong></p> 
+				<select id="colorpicker_picker">
+				  <option value="#ac725e">#ac725e</option>
+				  <option value="#d06b64">#d06b64</option>
+				  <option value="#f83a22">#f83a22</option>
+				  <option value="#fa573c">#fa573c</option>
+				  <option value="#ff7537">#ff7537</option>
+				  <option value="#ffad46">#ffad46</option>
+				  <option value="#42d692">#42d692</option>
+				  <option value="#16a765">#16a765</option>
+				  <option value="#7bd148">#7bd148</option>
+				  <option value="#b3dc6c">#b3dc6c</option>
+				  <option value="#fbe983">#fbe983</option>
+				  <option value="#fad165">#fad165</option>
+				  <option value="#92e1c0">#92e1c0</option>
+				  <option value="#9fe1e7">#9fe1e7</option>
+				</select>
 			</div>
 			<div class="select-font">
 				<p><strong>Select font</strong></p> 
@@ -152,7 +179,7 @@
 			
 			<div class="text-effect">
 				<p><strong>Text effect</strong></p> 
-				<input id="pd-text-border" type="button" value="<?php echo $text_Border; ?>" class="button" onclick="pd.textBorder()"/>
+				<input id="pd-text-border" type="button" value="<?php echo $text_Border; ?>" class="button"/>
 				<input id="pd-text-shadow" type="button" value="<?php echo $text_Shadow; ?>" class="button" onclick="pd.textShadow()"/>
 				<input id="pd-text-curve" type="button" value="<?php echo $text_Curve; ?>" class="button" onclick="pd.textCurve()"/>
 				
@@ -213,6 +240,21 @@
 		</form>
 	</div>
 <script type="text/javascript">
+
+	//init for canvas manager
+	var pd = new product_designer('pd_canvas');
+	pd.width  = <?php echo $width;?>;
+	pd.height = <?php echo $height;?>;
+	var canvasScale = 1;
+	var SCALE_FACTOR = 1.8;
+	canvasScale = canvasScale / SCALE_FACTOR;
+    pd.setHeight(pd.height * (1 / SCALE_FACTOR));
+    pd.setWidth(pd.width * (1 / SCALE_FACTOR));
+	<?php if (!empty($background)) { ?>
+		var originBG = '<?php echo $background;?>';
+		pd.setBackgroundImage(originBG);
+	<?php } ?>
+	
 	//BEGIN ADD COLOR PICKER
 	$('#colorpicker_picker').simplecolorpicker({picker: true, theme: 'fontawesome'});
 	//END ADD COLOR PICKER
@@ -257,6 +299,26 @@
 		}
 	});
 	
+	$('#pd-upload-image').ajaxUploadPrompt({
+		type: 'POST',
+		url: 'index.php?route=product_designer/upload',
+		dataType: 'json',
+		success: function(datas){
+			if(typeof(datas) == 'string')
+			{
+				//fix for IE problem
+				eval('datas = ' + datas);
+			}
+			if(datas.errorCode != 0)
+				alert(datas.errorMessage);
+			else{
+				var imagePath = datas.imagePath;
+				pd.addImage(imagePath,'100','100');
+			}
+			$('#pd-upload-image').val('Reupload');
+		}
+	});
+	
 	$('#pd-text-border').click(function() {
 		$('#option-text-border').slideToggle();
 		if($('#pd-text-border').val() == '<?php echo $text_Border; ?>'){
@@ -290,18 +352,6 @@
 		pd.curveText();
 	});
 	
-	//init for canvas manager
-	var pd = new Product_designer('pd_canvas');
-	pd.width  = <?php echo $width;?>;
-	pd.height = <?php echo $height;?>;
-	var canvasScale = 1;
-	var SCALE_FACTOR = 1.8;
-	canvasScale = canvasScale / SCALE_FACTOR;
-    pd.setHeight(pd.height * (1 / SCALE_FACTOR));
-    pd.setWidth(pd.width * (1 / SCALE_FACTOR));
-	<?php if (!empty($background)) { ?>
-		var originBG = '<?php echo $background;?>';
-		pd.setBackgroundImage(originBG);
-	<?php } ?>
+	
 </script>
 </body>
