@@ -296,16 +296,15 @@
 								width: '100%',
 								height: '100%',
 								onLoad: function() {
-									
+									var originalClose = $.colorbox.close;
+									$.colorbox.close = function(){
+									  if (confirm('Are you sure you want to close Product Designer?')) {
+										originalClose();
+									  }
+									};
 								}
 							});
 						}
-						var originalClose = $.colorbox.close;
-						$.colorbox.close = function(){
-						  if (confirm('Are you sure you want to close Product Designer?')) {
-							originalClose();
-						  }
-						};
 					</script>
 					<?php } ?>
 				]]>
