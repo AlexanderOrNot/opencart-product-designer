@@ -243,32 +243,31 @@ function product_designer(id, viewOnly){
 		var textObject = c.getActiveObject();
 		if(textObject.type != 'text')
 			return;
-        if($('#pcpb_text_shadow').val() == 'Remove Shadow'){
-            textObject.set({shadow: $('#pcpb_shadow_color').val() + ' ' + $('#pcpb_horizontal_offset').val() + ' ' + $('#pcpb_vertical_offset').val() + ' ' + $('#pcpb_blur_size').val() });
+        if($('#option-text-shadow').val() == 'Remove Shadow'){
+            textObject.set({shadow: $('#pd-shadow-color').val() + ' ' + $('#pd-horizontal-offset').val() + ' ' + $('#pd-vertical-offset').val() + ' ' + $('#pd-blur-size').val() });
         }
-        else if($('#pcpb_text_shadow').val() == 'Text Shadow'){
-            textObject.set({shadow: $('#pcpb_shadow_color').val() + ' 0 0 0' });
+        else if($('#option-text-shadow').val() == 'Text Shadow'){
+            textObject.set({shadow: $('#pd-shadow-color').val() + ' 0 0 0' });
         }
 		c.renderAll();
 	};
 
 
     this.borderText = function(){
-		alert('fkjdskj');
-        var c = this._canvas;
+		var c = this._canvas;
         var textObject = c.getActiveObject();
         if(textObject.type != 'text')
             return;
-        if($('#pcpb_text_border').val() == 'Remove Border'){
-            textObject.set({ stroke: $('#pcpb_border_color').val(), strokeWidth: $('#pcpb_stroke_width').val() });
+        if($('#option-text-border').val() == 'Remove Border'){
+            textObject.set({ stroke: $('#pd-border-color').val(), strokeWidth: $('#pd-stroke-width').val() });
         }
-        else if($('#pcpb_text_border').val() == 'Text Border'){
+        else if($('#option-text-border').val() == 'Text Border'){
             textObject.set({ stroke: 'none', strokeWidth: 0 });
         }
 
         c.renderAll();
     };
-	var canvas = new fabric.Canvas('pcpb_canvas');
+	var canvas = new fabric.Canvas('pd_canvas');
 	
 	this.curvedText = function(){
 		var c = this._canvas;
@@ -297,7 +296,24 @@ function product_designer(id, viewOnly){
 		
     };
 	
-	
+	this.curvedTextRadius = function(){
+	    var c = this._canvas;
+    	var obj = c.getActiveObject();
+    	if(obj){
+            obj.set('radius',$('#pd-radius').val()); 
+    	}
+    	c.renderAll();
+	};
+    
+    this.curvedTextSpacing = function(){
+	    var c = this._canvas;
+    	var obj = c.getActiveObject();
+    	if(obj){
+            obj.set('spacing',$('#pd-spacing').val()); 
+    	}
+    	c.renderAll();
+	};
+    
 	//button Move to Front
 	this.movetoFront = function(){
 		var c = this._canvas;
