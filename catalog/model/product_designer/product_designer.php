@@ -8,19 +8,19 @@ class ModelProductDesignerProductDesigner extends Model {
 	
 	public function insertImage($token, $content)
 	{
-		$query = $this->db->query('INSERT INTO ' . DB_PREFIX . 'pcpb (token, content) VALUES ("' . $token . '","' . $content . '")');
+		$query = $this->db->query('INSERT INTO ' . DB_PREFIX . 'product_designer (token, content) VALUES ("' . $token . '","' . $content . '")');
 		return $this->db->getLastId();
 	}
 
 	public function updateImage($token, $content)
 	{
-		$query = $this->db->query('UPDATE ' . DB_PREFIX . 'pcpb SET content = "' . $content . '" WHERE token = "' . $token . '"');
+		$query = $this->db->query('UPDATE ' . DB_PREFIX . 'product_designer SET content = "' . $content . '" WHERE token = "' . $token . '"');
 		return $this->db->getLastId();
 	}
 	
 	public function getProductSetting($productId)
 	{
-		$query = $this->db->query('SELECT * FROM ' . DB_PREFIX . 'pcpb_product WHERE product_id="' . $productId . '"');
+		$query = $this->db->query('SELECT * FROM ' . DB_PREFIX . 'product_option_designer WHERE product_id="' . $productId . '"');
 		return $query->row;
 	}
 
