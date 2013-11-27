@@ -182,7 +182,75 @@
               </div>
 		</form>
 	</div>
-<script type="text/javascript">
-	
-</script>
+<script type="text/javascript"><!--
+
+$('#button-cart').bind('click', function() {    
+	$.ajax({
+		url: 'index.php?route=checkout/cart/add',
+		type: 'post',
+		data: $('.product-info input[type=\'text\'], .product-info input[type=\'hidden\'], .product-info input[type=\'radio\']:checked, .product-info input[type=\'checkbox\']:checked, .product-info select, .product-info textarea'),
+		dataType: 'json',
+		success: function(json) {	
+		  	$.colorbox.close();
+			$('.success, .warning, .attention, information, .error').remove();
+			alert(json['success']);
+			if (json['error']) {			 
+				if (json['error']['option']) {
+					for (i in json['error']['option']) {
+						$('#option-' + i).after('<span class="error">' + json['error']['option'][i] + '</span>');
+					}
+				}
+                
+                if (json['error']['profile']) {
+                    $('select[name="profile_id"]').after('<span class="error">' + json['error']['profile'] + '</span>');
+                }
+			} 
+			
+			if (json['success']) {			 
+				$('#notification').html('<div class="success" style="display: none;">' + json['success'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
+					
+				$('.success').fadeIn('slow');
+					
+				$('#cart-total').html(json['total']);
+				
+				$('html, body').animate({ scrollTop: 0 }, 'slow'); 
+			}	
+		}
+	});
+});
+function finish(){
+	if(!confirm('<?php echo $text_All_text_image_converted; ?>'))
+		return;
+	var canvasData = pcpb.saveToImage();
+	//split data to pieces with 90kb/piece
+	var pieceCount = parseInt(canvasData.length/90000+1);
+	var link = '<?php echo $link; ?>';
+	var pieceIndex = 0;
+	$('#spinner').show();
+	sendData(pieceIndex, pieceCount, canvasData);
+}
+function sendData(index, count, data){
+	var dataSend = data.substring(index*90000, (index+1)*90000);
+	$.ajax({
+		type: 'POST',
+		url: 'index.php?route=pcpb/create/step3',
+		dataType: 'json',
+		data: {imageData: dataSend, imageIndex: index+1, imageCount: count},
+		success: function(datas){
+			console.log(datas);
+			if(datas.errorCode != 0)
+				alert(datas.errorMessage);
+			else{
+				index++;
+				if(index<count)
+					sendData(index,count,data);
+				else{
+					var token = datas.token;
+					location.href='index.php?route=pcpb/create/finish&token=' + token + '&product_id=<?php echo $product_id ?>&product_option_price=<?php echo $product_option_price;?>&product_option_value_id=<?php echo $product_option_value_id; ?>&image_option_id=' + $('#image_option_id').val();						
+				}
+			}
+		}
+	})
+}
+//--></script>
 </body>
