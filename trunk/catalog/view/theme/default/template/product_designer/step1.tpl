@@ -234,17 +234,29 @@
 
 	//init for canvas manager
 	var pd = new product_designer('pd_canvas');
-	pd.width  = <?php echo $width;?>;
-	pd.height = <?php echo $height;?>;
-	var canvasScale = 1;
-	var SCALE_FACTOR = 1.8;
-	canvasScale = canvasScale / SCALE_FACTOR;
-    pd.setHeight(pd.height * (1 / SCALE_FACTOR));
-    pd.setWidth(pd.width * (1 / SCALE_FACTOR));
 	<?php if (!empty($background)) { ?>
+		if(<?php echo $width;?> <= 600){
+			pd.width  = <?php echo $width;?>;
+			pd.height = <?php echo $height;?>;
+			
+		} else {
+			$canvas_scale = 1 - (600 / <?php echo $width;?>) ;
+			pd.width  = 600;
+			pd.height = <?php echo $height;?> - (<?php echo $height;?> * $canvas_scale);
+		}
+		
+		pd.setHeight(pd.height);
+		pd.setWidth(pd.width);
 		var originBG = '<?php echo $background;?>';
 		pd.setBackgroundImage(originBG);
+		
 	<?php } ?>
+	//var canvasScale = 1;
+	//var SCALE_FACTOR = 1.8;
+	//canvasScale = canvasScale / SCALE_FACTOR;
+    //pd.setHeight(pd.height * (1 / SCALE_FACTOR));
+    //pd.setWidth(pd.width * (1 / SCALE_FACTOR));
+	
 	
 	//BEGIN ADD COLOR PICKER
 	$('#colorpicker_picker').simplecolorpicker({picker: true, theme: 'fontawesome'});
