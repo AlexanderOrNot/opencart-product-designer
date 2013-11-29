@@ -21,10 +21,27 @@
 	<script src="catalog/view/javascript/jquery/colorbox/jquery.colorbox-min.js"></script>
     <script src="catalog/view/javascript/product_designer/jquery.fontselector.js"></script>
 	<script src="catalog/view/javascript/jquery/simplecolorpicker/jquery.simplecolorpicker.js"></script>
-	
+	<style>
+		.col-left{
+			float: left;
+			width: 56%;
+			padding: 20px;
+			display: block;
+		}
+		.col-right{
+			float: right;
+			width: 36%;
+			padding: 20px;
+			text-align: left;
+			border-left: 1px solid #eee;
+		}
+	</style>
 </head>
 <body>	
-	<div>
+	<div class="col-left">
+		<img src="http://placehold.it/600x856/000000/333333" />
+	</div>
+	<div class="col-right">
 		<form method="post" action="">
 			<?php if ($options) { ?>
               <div class="options">
