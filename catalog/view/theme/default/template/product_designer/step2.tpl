@@ -194,9 +194,11 @@
                   <input type="text" name="quantity" size="2" value="<?php echo $minimum; ?>" />
                   <input type="hidden" name="product_id" size="2" value="<?php echo $product_id; ?>" />
                   &nbsp;
-                  <input type="button" value="<?php echo $button_cart; ?>" id="button-cart" class="button" />
+                  <input type="button" value="<?php echo $text_Finish_Cart; ?>" id="button-cart" class="button" />
                 </div>                
               </div>
+			  <br />
+			  <input type="button" value="Back" id="button-back" class="button" />
 		</form>
 	</div>
 <script type="text/javascript"><!--
