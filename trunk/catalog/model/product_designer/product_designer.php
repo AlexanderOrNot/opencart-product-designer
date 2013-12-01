@@ -12,6 +12,12 @@ class ModelProductDesignerProductDesigner extends Model {
 		return $this->db->getLastId();
 	}
 
+    public function getImageCanvas($id)
+	{
+		$query = $this->db->query('SELECT * FROM ' . DB_PREFIX . 'product_designer WHERE id="' . (int)$id . '"');
+		return $query->row;
+	}
+    
 	public function updateImage($token, $content)
 	{
 		$query = $this->db->query('UPDATE ' . DB_PREFIX . 'product_designer SET content = "' . $content . '" WHERE token = "' . $token . '"');
