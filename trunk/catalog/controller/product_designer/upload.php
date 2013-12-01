@@ -40,6 +40,10 @@ class ControllerProductDesignerUpload extends Controller {
 			exit();
 		}
 		
+        $tempDir = $this->config->get('pcpb_path_folder_save_temprarily');
+		if(!$tempDir || $tempDir == '' || !is_writable(DIR_IMAGE . $tempDir))
+			$tempDir = 'product_designer/temp/';
+            
 		$rand = $this->genRndNum(3);
 		$fileName = time() . $rand . '.' . $fileType;
 		
