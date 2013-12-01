@@ -3,7 +3,6 @@ class ControllerProductDesignerUpload extends Controller {
 	private $error = array(); 
      
   	public function index() {
-	alert('test')
 		$fileType = '';
 		
 		switch($this->request->files['uploads']['type'][0])
