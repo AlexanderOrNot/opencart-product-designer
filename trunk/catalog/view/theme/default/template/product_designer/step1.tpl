@@ -48,7 +48,7 @@
 		p{
 			margin-bottom: 10px;
 		}
-		.upload-image, .flip-image, .text-content, .select-font, .text-effect{
+		.upload-image, .flip-image, .text-content, .text-fontsize, .text-color, .select-font, .text-effect{
 			padding: 20px 0;
 			border-bottom: 1px solid #eee;
 		}
@@ -171,8 +171,8 @@
 			<div class="text-effect">
 				<p><strong>Text effect</strong></p> 
 				<input id="pd-text-border" type="button" value="<?php echo $text_Border; ?>" class="button"/>
-				<input id="pd-text-shadow" type="button" value="<?php echo $text_Shadow; ?>" class="button" onclick="pd.textShadow()"/>
-				<input id="pd-text-curve" type="button" value="<?php echo $text_Curve; ?>" class="button" onclick="pd.textCurve()"/>
+				<input id="pd-text-shadow" type="button" value="<?php echo $text_Shadow; ?>" class="button"/>
+				<input id="pd-text-curve" type="button" value="<?php echo $text_Curve; ?>" class="button"/>
 				
 				<div id="option-text-border">
 					<table>
@@ -214,12 +214,12 @@
 					<table>
 						<tr>
 							<td>Spacing: </td>
-							<td><input type="range" min="1" max="5" value="1" id="pd-spacing" onchange="pd.curveText();" /></td>
+							<td><input type="range" min="-20" max="20" value="0" id="pd-spacing" onchange="pd.curvedTextSpacing();" /></td>
 							<td rowspan="2" style="border-left: 1px solid #ddd; padding-left: 75px;"><h1><?php echo $text_Curve; ?></h1></td>
 						</tr>
 						<tr>
 							<td>Radius: </td>
-							<td><input type="range" min="1" max="5" value="1" id="pd-radius" onchange="pd.curveText();" /></td>
+							<td><input type="range" min="-20" max="20" value="0" id="pd-radius" onchange="pd.curvedTextRadius();" /></td>
 						</tr>
 					</table>
 				</div>
@@ -248,7 +248,7 @@
 		pd.setHeight(pd.height);
 		pd.setWidth(pd.width);
 		var originBG = '<?php echo $background;?>';
-		pd.setBackgroundImage(originBG);
+		pd.setBackgroundImage(originBG, pd.width, pd.height);
 		
 	<?php } ?>
 	//var canvasScale = 1;
