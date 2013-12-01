@@ -322,12 +322,8 @@ function product_designer(id, viewOnly){
 	};
 	this.saveToImage = function(){
 		var c = this._canvas;
-		var o = c.getActiveObject();
-		if(o != null){
-			o.setActive(false);
-			c.renderAll();
-		}
-		return this._canvas.toDataURL();
+		
+		return c.toDataURL();
 	};
 	
 	
