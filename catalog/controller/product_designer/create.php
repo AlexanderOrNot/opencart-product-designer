@@ -190,6 +190,16 @@ class ControllerProductDesignerCreate extends Controller {
 			$product_id = 0;
 		}
 		
+        if (isset($this->request->get['id'])) {
+			$id = $this->request->get['id'];
+		} else {
+			$id = "";
+		}
+        
+        $this->load->model('product_designer/product_designer');
+		$imageCanvas = $this->model_product_designer_product_designer->getImageCanvas($id);
+        $this->data['imageCanvas'] = $imageCanvas['content'];
+            
 		$this->load->model('catalog/product');
 		
 		$product_info = $this->model_catalog_product->getProduct($product_id);
@@ -289,7 +299,7 @@ class ControllerProductDesignerCreate extends Controller {
 			$fp = fopen($imagePath , 'wb');
 			fwrite($fp, $unencodedData);
 			fclose($fp);
-			
+            
 			$token = time();
 			$content = HTTP_SERVER . 'image/' . $mainDir . $fileName;
 			$this->load->model('product_designer/product_designer');
@@ -298,7 +308,8 @@ class ControllerProductDesignerCreate extends Controller {
 			if($id > 0){
 				$res = array(
 					'errorCode' => 0,
-					'token' => $token
+					'token' => $token,
+                    'id' => $id
 				);
 				echo (json_encode($res));
 				exit();
