@@ -129,7 +129,7 @@
 		<canvas id="pd_canvas" width="<?php echo $width; ?>" height="<?php echo $height; ?>"></canvas>
 	</div>
 	<div class="col-right">
-		<form method="post" action="index.php?route=product_designer/create/step2&product_id=<?php echo $product_id; ?>">
+		<form method="post">
 			<div class="upload-image">
 				<p><strong>Upload image</strong></p> 
 				<input type="button" class="button" id="pd-upload-image" value="Browse" />
@@ -226,7 +226,7 @@
 				
 			</div>
 			<div style="margin-top:20px">
-				<input class="button" type="submit" value="Next" />
+				<input class="button" id="btnNext" type="button" value="Next" />
 			</div>
 		</form>
 	</div>
@@ -354,7 +354,37 @@
 		}
 		pd.curveText();
 	});
-	
-	
+	$('#btnNext').bind('click', function() { 
+	   finish();
+    });
+    function finish(){
+    	var canvasData = pd.saveToImage();
+    	//split data to pieces with 90kb/piece
+    	var pieceCount = parseInt(canvasData.length/90000+1);
+        var pieceIndex = 0;
+    	sendData(pieceIndex, pieceCount, canvasData);
+    }
+    function sendData(index, count, data){
+    	var dataSend = data.substring(index*90000, (index+1)*90000);
+    	$.ajax({
+    		type: 'POST',
+    		url: 'index.php?route=product_designer/create/step3',
+    		dataType: 'json',
+    		data: {imageData: dataSend, imageIndex: index+1, imageCount: count},
+    		success: function(datas){
+    			if(datas.errorCode != 0)
+    				alert(datas.errorMessage);
+    			else{    		
+    			    index++;
+					if(index<count)
+						sendData(index,count,data);
+					else{
+    					var id = datas.id;
+                        var token = datas.token;
+    					location.href = 'index.php?route=product_designer/create/step2&product_id=<?php echo $product_id; ?>&token='+ token +'&id='+ id;				   }
+   				}    			
+    		}
+    	});
+    }
 </script>
 </body>
