@@ -39,7 +39,7 @@
 </head>
 <body>	
 	<div class="col-left">
-		<img src="http://placehold.it/600x856/000000/333333" />
+		<img src="<?php echo $imageCanvas; ?>" />
 	</div>
 	<div class="col-right">
 		<form method="post" action="">
@@ -237,39 +237,5 @@ $('#button-cart').bind('click', function() {
 		}
 	});
 });
-function finish(){
-	if(!confirm('<?php echo $text_All_text_image_converted; ?>'))
-		return;
-	var canvasData = pcpb.saveToImage();
-	//split data to pieces with 90kb/piece
-	var pieceCount = parseInt(canvasData.length/90000+1);
-	var link = '<?php echo $link; ?>';
-	var pieceIndex = 0;
-	$('#spinner').show();
-	sendData(pieceIndex, pieceCount, canvasData);
-}
-function sendData(index, count, data){
-	var dataSend = data.substring(index*90000, (index+1)*90000);
-	$.ajax({
-		type: 'POST',
-		url: 'index.php?route=pcpb/create/step3',
-		dataType: 'json',
-		data: {imageData: dataSend, imageIndex: index+1, imageCount: count},
-		success: function(datas){
-			console.log(datas);
-			if(datas.errorCode != 0)
-				alert(datas.errorMessage);
-			else{
-				index++;
-				if(index<count)
-					sendData(index,count,data);
-				else{
-					var token = datas.token;
-					location.href='index.php?route=pcpb/create/finish&token=' + token + '&product_id=<?php echo $product_id ?>&product_option_price=<?php echo $product_option_price;?>&product_option_value_id=<?php echo $product_option_value_id; ?>&image_option_id=' + $('#image_option_id').val();						
-				}
-			}
-		}
-	})
-}
 //--></script>
 </body>
