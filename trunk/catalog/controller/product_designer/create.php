@@ -195,7 +195,7 @@ class ControllerProductDesignerCreate extends Controller {
 		} else {
 			$id = "";
 		}
-        
+        $this->data['product_id'] = $this->request->get['product_id'];
         $this->load->model('product_designer/product_designer');
 		$imageCanvas = $this->model_product_designer_product_designer->getImageCanvas($id);
         $this->data['imageCanvas'] = $imageCanvas['content'];
