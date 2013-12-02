@@ -203,8 +203,7 @@
 	</div>
 <script type="text/javascript"><!--
 
-$('#button-cart').bind('click', function() {
-    $.colorbox.close();
+$('#button-cart').bind('click', function() {    
 	$.ajax({
 		url: 'index.php?route=checkout/cart/add',
 		type: 'post',
@@ -224,17 +223,11 @@ $('#button-cart').bind('click', function() {
                 }
 			} 
 			
-			if (json['success']) {			 
-				$('#notification').html('<div class="success" style="display: none;">' + json['success'] + '<img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>');
-					
-				$('.success').fadeIn('slow');
-					
-				$('#cart-total').html(json['total']);
-				
-				$('html, body').animate({ scrollTop: 0 }, 'slow'); 
+			if (json['success']) {
+                location.href = 'index.php?route=checkout/cart';
 			}	
 		}
-	});
+	});    
 });
 //--></script>
 </body>
