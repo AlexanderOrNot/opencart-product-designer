@@ -365,6 +365,11 @@
     	sendData(pieceIndex, pieceCount, canvasData);
     }
     function sendData(index, count, data){
+        var pd_option_save_image = $('#pd-upload-image').val();
+        var pd_option_save_text = $('#pd-text-content').val()
+        var pd_option_save_font = $('#pd-text-font').text();
+        var pd_option_save_text_color = $('#colorpicker_picker').val();
+        
     	var dataSend = data.substring(index*90000, (index+1)*90000);
     	$.ajax({
     		type: 'POST',
@@ -381,7 +386,7 @@
 					else{
     					var id = datas.id;
                         var token = datas.token;
-    					location.href = 'index.php?route=product_designer/create/step2&product_id=<?php echo $product_id; ?>&token='+ token +'&id='+ id;				   }
+    					location.href = 'index.php?route=product_designer/create/step2&product_id=<?php echo $product_id; ?>&token='+ token +'&id='+ id + '&pd_option_save_image='+ pd_option_save_image +'&pd_option_save_text='+ pd_option_save_text +'&pd_option_save_font='+ pd_option_save_font +'&pd_option_save_text_color='+ pd_option_save_text_color;				   }
    				}    			
     		}
     	});
