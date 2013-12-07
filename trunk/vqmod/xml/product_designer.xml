@@ -148,7 +148,7 @@
 			} else {
 				$image = 'no_image.jpg';
 			}
-            $product_option_designer_data[] = array(
+            $product_option_designer_data[] = array(                
     			'frame_image'               => $image,
     			'thumb'                     => $this->model_tool_image->resize($image, 100, 100),
     			'enable'                    => $product_option_designer['enable'],
@@ -329,6 +329,7 @@
 				$image = 'no_image.jpg';
 			}
             $product_option_designer_data[] = array(
+                'product_id'                => $product_option_designer['product_id'],
     			'frame_image'               => $image,
     			'thumb'                     => $this->model_tool_image->resize($image, 100, 100),
     			'enable'                    => $product_option_designer['enable'],
@@ -372,6 +373,98 @@
                     'text_color'                => $product_option_designer['text_color']
     			);
     		}
+                ]]>
+			</add>
+		</operation>
+    </file>
+    <file name="catalog/controller/checkout/cart.php">
+		<operation>
+			<search position="before" index="1">
+				<![CDATA[if ($this->config->get('config_customer_price') && !$this->customer->isLogged()) {]]>
+			</search>
+			<add>
+				<![CDATA[$this->load->model('product_designer/product_designer');
+            if(isset($this->session->data['pd_token']))
+            {
+        		$product_option_designers = $this->model_product_designer_product_designer->getAllProductDesignerOptions();
+                    
+                $this->data['product_option_designers'] = array();   
+                                
+        		foreach ($product_option_designers as $product_option_designer) {
+        			
+                    $this->data['product_option_designers'][] = array(
+                        'product_id'                => $product_option_designer['product_id']
+                    );
+        		}
+               $sessionPD = $this->model_product_designer_product_designer->getDataByToken($this->session->data['pd_token']);
+               
+               if($sessionPD != null)
+               {
+                    if($this->config->get('pd_option_save_design') != null)
+                    {
+                        $this->data['pd_option_save_design'] = $this->model_product_designer_product_designer->getOptionValues($this->config->get('pd_option_save_design'));
+                    }
+                    
+                    if($this->config->get('pd_option_save_image') != null)
+                    {
+                        $this->data['pd_option_save_image'] = $this->model_product_designer_product_designer->getOptionValues($this->config->get('pd_option_save_image'));
+                    }
+                    
+                    if($this->config->get('pd_option_save_text') != null)
+                    {
+                        $this->data['pd_option_save_text'] = $this->model_product_designer_product_designer->getOptionValues($this->config->get('pd_option_save_text'));
+                    }
+                    
+                    if($this->config->get('pd_option_save_font') != null)
+                    {
+                        $this->data['pd_option_save_font'] = $this->model_product_designer_product_designer->getOptionValues($this->config->get('pd_option_save_font'));
+                    }
+                    
+                    if($this->config->get('pd_option_save_text_color') != null)
+                    {
+                       $this->data['pd_option_save_text_color'] = $this->model_product_designer_product_designer->getOptionValues($this->config->get('pd_option_save_text_color'));
+                    }
+               }
+            }
+                ]]>
+			</add>
+		</operation>
+    </file>
+    <file name="catalog/view/theme/*/template/checkout/cart.tpl">
+        <operation>
+            <search position="before" index="1">
+                <![CDATA[<?php foreach ($product['option'] as $option) { ?>]]>
+            </search>
+            <add>
+                <![CDATA[<?php foreach ($product_option_designers as $product_option_designer) {
+                if($product_option_designer['product_id'] == $product['product_id']){
+                    if(isset($pd_option_save_design)){ $index = 0; foreach ($pd_option_save_design as $pd_option_save_designs) {                  
+                        if(count($pd_option_save_design)-1 == $index){?>                
+                    - <small>Your Designer: <a href="<?php echo $pd_option_save_designs['image']; ?>">Image</a></small><br />
+                    <?php } 
+                    $index ++;} } 
+                    if(isset($pd_option_save_image)){ $index = 0; foreach ($pd_option_save_image as $pd_option_save_images) {                  
+                        if(count($pd_option_save_image)-1 == $index){?>                
+                    - <small>Your Image: <a href="<?php echo $pd_option_save_images['image']; ?>">Image</a></small><br />
+                    <?php } 
+                    $index ++;} }
+                    if(isset($pd_option_save_text)){ $index = 0; foreach ($pd_option_save_text as $pd_option_save_texts) {                  
+                        if(count($pd_option_save_text)-1 == $index){?>                
+                    - <small>Your Text: <?php echo $pd_option_save_texts['image']; ?></small><br />
+                    <?php } 
+                    $index ++;} }
+                    if(isset($pd_option_save_font)){ $index = 0; foreach ($pd_option_save_font as $pd_option_save_fonts) {                  
+                        if(count($pd_option_save_fonts)-1 == $index){?>                
+                    - <small>Font: <?php echo $pd_option_save_fonts['image']; ?></small><br />
+                    <?php } 
+                    $index ++;} }
+                    if(isset($pd_option_save_text_color)){ $index = 0; foreach ($pd_option_save_text_color as $pd_option_save_text_colors) {                  
+                        if(count($pd_option_save_text_color)-1 == $index){?>                
+                    - <small>Text color: <?php echo $pd_option_save_text_colors['image']; ?></small><br />
+                    <?php } 
+                    $index ++;} } ?>
+                <?php } ?>
+                <?php } ?>
                 ]]>
 			</add>
 		</operation>
