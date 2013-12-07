@@ -128,6 +128,7 @@ class ControllerProductDesignerCreate extends Controller {
 				$image = 'no_image.jpg';
 			}
             $this->data['product_option_designers'][] = array(
+                'product_id'                => $product_option_designer['product_id'],
 				'frame_image'               => $image,
 				'thumb'                     => $this->model_tool_image->resize($image, 100, 100),
 				'enable'                    => $product_option_designer['enable'],
@@ -177,12 +178,17 @@ class ControllerProductDesignerCreate extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-    public function step2(){
+    public function step2(){        
 		$this->language->load('module/product_designer');        
         $this->language->load('product/product');
         
         $this->load->model('tool/image');
         $this->load->model('catalog/product');
+        
+        if (isset($this->request->get['token'])) 
+        {
+			$this->session->data['pd_token'] = $this->request->get['token'];
+        }    
         
         if (isset($this->request->get['product_id'])) {
 			$product_id = (int)$this->request->get['product_id'];
@@ -199,6 +205,33 @@ class ControllerProductDesignerCreate extends Controller {
         $this->load->model('product_designer/product_designer');
 		$imageCanvas = $this->model_product_designer_product_designer->getImageCanvas($id);
         $this->data['imageCanvas'] = $imageCanvas['content'];
+                
+        $this->load->model('setting/setting');
+            
+		if($this->config->get('pd_option_save_design') != null)
+        {
+            $this->model_product_designer_product_designer->insertPDOption($this->config->get('pd_option_save_design'),$imageCanvas['content'],1);
+        }
+        
+        if($this->config->get('pd_option_save_image') != null)
+        {
+            $this->model_product_designer_product_designer->insertPDOption($this->config->get('pd_option_save_image'),$this->request->get['pd_option_save_image'],1);
+        }
+        
+        if($this->config->get('pd_option_save_text') != null)
+        {
+            $this->model_product_designer_product_designer->insertPDOption($this->config->get('pd_option_save_text'),$this->request->get['pd_option_save_text'],1);
+        }
+        
+        if($this->config->get('pd_option_save_font') != null)
+        {
+            $this->model_product_designer_product_designer->insertPDOption($this->config->get('pd_option_save_font'),$this->request->get['pd_option_save_font'],1);
+        }
+        
+        if($this->config->get('pd_option_save_text_color') != null)
+        {
+            $this->model_product_designer_product_designer->insertPDOption($this->config->get('pd_option_save_text_color'),$this->request->get['pd_option_save_text_color'],1);
+        }
             
 		$this->load->model('catalog/product');
 		
@@ -304,7 +337,7 @@ class ControllerProductDesignerCreate extends Controller {
 			$content = HTTP_SERVER . 'image/' . $mainDir . $fileName;
 			$this->load->model('product_designer/product_designer');
 			$id = $this->model_product_designer_product_designer->insertImage($token, $content);
-			
+            
 			if($id > 0){
 				$res = array(
 					'errorCode' => 0,
@@ -364,6 +397,27 @@ class ControllerProductDesignerCreate extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
+    public function cart(){
+        //$this->redirect($this->url->link('checkout/cart'));
+        $this->load->model('setting/extension');
+        if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/cart.tpl')) {
+			$this->template = $this->config->get('config_template') . '/template/checkout/cart.tpl';
+		} else {
+			$this->template = 'default/template/checkout/cart.tpl';
+		}
+		
+		$this->children = array(
+			'common/column_left',
+			'common/column_right',
+			'common/content_bottom',
+			'common/content_top',
+			'common/footer',
+			'common/header'	
+        );
+					
+		$this->response->setOutput($this->render());
+    }
+    
 	function echoDbg( $what, $desc = '' )
 	{
 		if ( $desc )

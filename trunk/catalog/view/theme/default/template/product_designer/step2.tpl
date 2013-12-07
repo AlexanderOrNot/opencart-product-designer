@@ -224,7 +224,8 @@ $('#button-cart').bind('click', function() {
 			} 
 			
 			if (json['success']) {
-                location.href = 'index.php?route=checkout/cart';
+			     parent.jQuery.fn.colorbox.close();
+                location.href = 'index.php?route=product_designer/create/cart';
 			}	
 		}
 	});    

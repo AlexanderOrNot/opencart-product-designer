@@ -11,7 +11,12 @@ class ModelProductDesignerProductDesigner extends Model {
 		$query = $this->db->query('INSERT INTO ' . DB_PREFIX . 'product_designer (token, content) VALUES ("' . $token . '","' . $content . '")');
 		return $this->db->getLastId();
 	}
-
+    
+    public function insertPDOption($option_id, $option_image, $option_sort_order)
+	{
+        $this->db->query("INSERT INTO " . DB_PREFIX . "option_value SET option_id = '" . (int)$option_id . "', image = '" . $this->db->escape               (html_entity_decode($option_image, ENT_QUOTES, 'UTF-8')) . "', sort_order = '" . (int)$option_sort_order . "'");
+    }
+    
     public function getImageCanvas($id)
 	{
 		$query = $this->db->query('SELECT * FROM ' . DB_PREFIX . 'product_designer WHERE id="' . (int)$id . '"');
@@ -30,6 +35,22 @@ class ModelProductDesignerProductDesigner extends Model {
 		return $query->row;
 	}
 
+    public function getOptionValues($option_id) {
+		$option_value_data = array();
+		
+		$option_value_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "option_value WHERE option_id = '" . (int)$option_id . "'");
+				
+		foreach ($option_value_query->rows as $option_value) {
+			$option_value_data[] = array(
+				'option_value_id' => $option_value['option_value_id'],
+				'image'           => $option_value['image'],
+				'sort_order'      => $option_value['sort_order']
+			);
+		}
+		
+		return $option_value_data;
+	}
+    
 	public function getProductOptions($product_id) {
 		$product_option_data = array();
 
@@ -85,6 +106,17 @@ class ModelProductDesignerProductDesigner extends Model {
 		return $query->row;
 	}
 
+    public function getAllProductDesignerOptions(){
+        $product_option_designer_data = array();
+		$product_option_designers = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_option_designer");
+        foreach ($product_option_designers->rows as $product_option_designer) {
+            $product_option_designer_data[] = array(
+                    'product_id'                => $product_option_designer['product_id']
+            );
+        }
+		return $product_option_designer_data;
+	}
+    
 	public function getSetting($group, $store_id = 0) {
 		$data = array(); 
 		
